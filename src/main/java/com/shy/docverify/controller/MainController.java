@@ -1,4 +1,4 @@
-package com.shy.docVerify.controller;
+package com.shy.docverify.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

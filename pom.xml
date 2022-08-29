@@ -8,8 +8,8 @@
 		<version>2.7.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.shy.docVerify</groupId>
-	<artifactId>docVerify</artifactId>
+	<groupId>com.shy.docverify</groupId>
+	<artifactId>com</artifactId>
 	<version>0.0.1</version>
 	<name>docVerify</name>
 	<description>docVerify Project</description>

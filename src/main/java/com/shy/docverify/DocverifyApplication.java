@@ -1,13 +1,13 @@
-package com.shy.docVerify;
+package com.shy.docverify;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DocVerifyApplication {
+public class DocverifyApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DocVerifyApplication.class, args);
+		SpringApplication.run(DocverifyApplication.class, args);
 	}
 
 }
