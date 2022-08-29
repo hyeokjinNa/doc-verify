@@ -8,11 +8,11 @@
 		<version>2.7.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.vtw.shy</groupId>
-	<artifactId>shy</artifactId>
+	<groupId>com.shy.docVerify</groupId>
+	<artifactId>docVerify</artifactId>
 	<version>0.0.1</version>
-	<name>shy</name>
-	<description>Shy Project</description>
+	<name>docVerify</name>
+	<description>docVerify Project</description>
 	<properties>
 		<java.version>18</java.version>
 	</properties>
