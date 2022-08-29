@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/view/
+      suffix: .jsp
+    hiddenmethod:      filter:        enabled: true   #PUT, DELETE 사용
+ 

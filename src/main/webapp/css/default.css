@@ -1,0 +1,28 @@
+@charset "UTF-8";
+html {
+	overflow-y:scroll;
+}
+body {
+	margin: 0;
+	color:#999A9C;
+	background: #F5F6F7;
+}
+
+p {
+	margin:10px 0;
+}
+
+a {
+	color:#999A9C;
+}
+a:hover {
+	color:#424242;
+}
+
+#header, #footer {
+	background-color: #F5DF4E;
+	height: 100px;
+	width: 100%;
+	position: relative;
+}
+
