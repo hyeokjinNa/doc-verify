@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DocverifyApplication {
+public class DocVerifyApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DocverifyApplication.class, args);
+		SpringApplication.run(DocVerifyApplication.class, args);
 	}
 
 }
