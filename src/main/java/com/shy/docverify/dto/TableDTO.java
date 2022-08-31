@@ -8,12 +8,13 @@ public class TableDTO {
 	private String column;
 	private String columnComment;
 	private String type;
+	private String msg;
 	private int length;
 	private int precision;
 	private int scale;
 	private boolean nullable;
 	private boolean pk;
-	private boolean fk;
+	private boolean verify;
 	
 	public String getSchema() {
 		return schema;
@@ -51,6 +52,12 @@ public class TableDTO {
 	public void setType(String type) {
 		this.type = type;
 	}
+	public String getMsg() {
+		return msg;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
 	public int getLength() {
 		return length;
 	}
@@ -81,19 +88,19 @@ public class TableDTO {
 	public void setPk(boolean pk) {
 		this.pk = pk;
 	}
-	public boolean isFk() {
-		return fk;
+	public boolean isVerify() {
+		return verify;
 	}
-	public void setFk(boolean fk) {
-		this.fk = fk;
+	public void setVerify(boolean verify) {
+		this.verify = verify;
 	}
 	
 	@Override
 	public String toString() {
 		return "TableDTO [schema=" + schema + ", table=" + table + ", tableComment=" + tableComment + ", column="
-				+ column + ", columnComment=" + columnComment + ", type=" + type + ", length=" + length + ", precision="
-				+ precision + ", scale=" + scale + ", nullable=" + nullable + ", pk=" + pk + ", fk=" + fk + "]";
+				+ column + ", columnComment=" + columnComment + ", type=" + type + ", msg=" + msg + ", length=" + length
+				+ ", precision=" + precision + ", scale=" + scale + ", nullable=" + nullable + ", pk=" + pk
+				+ ", verify=" + verify + "]";
 	}
-	
 	
 }
