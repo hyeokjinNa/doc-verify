@@ -1,179 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>SHY</title>
-<link rel="stylesheet" href="/css/reset.css">
-<link rel="stylesheet" href="/css/bootstrap.css">
-<link rel="stylesheet" href="/css/bootstrap-grid.css">
-<link rel="stylesheet" href="/css/bootstrap-reboot.css">
-<link rel="stylesheet" href="/css/style.css">
-<style>
-    html.popup{
-        overflow-y: hidden;
-        overflow-x: hidden;
-        padding:17px;
-    }
-    #content {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-    }
-    #excelUploadWrap {
-        position: absolute;
-        top:10%;
-        left:10%;
-        width: 80%;
-        height: 80%;
-        border: black 1px solid;
-    }
-    #dbSettingWrap {
-        width: 70%;
-        height: 120px;
-        float: left;
-    }
-    #excelDownloadWrap {
-        width: 30%;
-        height: 120px;
-        float: right;
-    }
-    #excelUploadBox{
-        width: 100%;
-        min-height: 630px;
-        clear: both;
-    }
-    #excelUploadBox h2{
-        font-size: 20px;
-        font-weight: 700;
-        margin-top : 200px;
-        margin-left : 100px;
-    }
-    #excelUploadBox h3{
-        margin-left : 100px;
-        margin-bottom: 30px;
-        color:#424242;
-    }
-    #dbSettingBtn {
-        position: absolute;
-        left:47%;
-        top:40px;
-    }
-    .excelDownLoadWrapBtn {
-        margin-left: 240px;
-        margin-top: 40px;
-    }
-    #excelBoxList {
-        margin-left : 100px;
-    }
-    #excelFIle{
-        width:350px;
-        height:350px;
-        outline: none;
-        border:1px solid #424242;
-    }
-    #excelUpload{
-        width:344px;
-        height:344px;
-        border-radius: 10px;
-        font-size: 100px;
-        text-align: center;
-        line-height: 344px;
-        cursor: pointer;
-        float:left;
-    }
-    .excelBox{
-        width:350px;
-        height:350px;
-        border-radius: 10px;
-        margin-right: 30px;
-        float:left;
-        cursor: pointer;
-        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2), 0 0 20px 0 rgba(0, 0, 0, 0.19);
-    }
-    .excelBox:hover{
-        transform: scale(1.1);
-    }
-    .excelBox img{
-        width:350px;
-        height:350px;
-    }
-    #excelFileName{
-        margin-top: 15px;
-        font-size: 20px;
-        font-weight: 700;
-    }
-    #btnWrap .register{
-        position: absolute;
-        left:46%;
-        bottom:50px;
-    }
-    #btnWrap .cancel{
-        position: absolute;
-        left:50%;
-        bottom:50px;
-    }
-    .dbSettingWrap{
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,.75);
-        display: none;
-        left: 0;
-        top:0;
-        z-index: 1;
-    }
-    .dbSettingWrap.on{
-        display: block;
-    }
-    .dbSettingWrap a{
-        color: black;
-        text-decoration: none;
-        user-select: none;
-    }
-    .dbSettingBox{
-        user-select: none;
-        width: 400px;
-        height: 500px;
-        border: 1px solid #bebebe;
-        border-radius: 10px;
-        position: absolute;
-        left: 50%;
-        top:50%;
-        margin: -281px 0 0 -201px;
-        background-color: #fff;
-    }
-    .dbSettingHeader{
-        font-size: 20px;
-        font-weight: 700;
-        margin-top: 25px;
-        margin-left: 165px;
-    }
-    .dbSettingContent h2{
-        font-size: 20px;
-        font-weight: 700;
-    }
-    .inputWrap h2{
-        margin-top: 30px;
-    }
-    .inputWrap input{
-        margin-top: 10px;
-    }
-    .dbSettingFooter .register{
-        position: absolute;
-        left:35%;
-        bottom:20px;
-    }
-    .dbSettingFooter .cancel{
-        position: absolute;
-        left:55%;
-        bottom:20px;
-    }
+    <title>DocVerify</title>
+<c:import url="/WEB-INF/view/template/link.jsp"/>
+<link rel="stylesheet" href="/css/index.css">
 
-</style>
 </head>
 <body>
+<c:import url="/WEB-INF/view/template/header.jsp"/>
     <div id="content">
         <div id="excelUploadWrap">
             <div id="dbSettingWrap">
@@ -230,68 +69,70 @@
         </div>
     </div>
 </div>
+<c:import url="/WEB-INF/view/template/footer.jsp"/> 
 
 
 
-<script src="/js/jquery-3.3.1.js"></script>
-<script src="/js/bootstrap.bundle.js"></script>
-<script src="/js/bootstrap.js"></script>
-<script>
+<script type="text/javascript">
     const $dbSetting = $("#dbSettingBtn");
+    const $excelUploadRegister = $("#btnWrap .register");
     const $excelUploadCancel = $("#btnWrap .cancel");
     const $dbSettingCancel = $(".dbSettingFooter .cancel");
-
+    let files = [];
+    
 
     //엑셀 파일 업로드
     $('#excelFIle').on("change",function() {
 
         const file = this.files[0];
+        files.push(file);  // 여기서부터해야함
 
-        if (/^application\/.test(file.type)&&/.sheet$/.test(file.type)) {
-
+        if (/^application/.test(file.type)&&/.sheet$/.test(file.type)) {
             //multipart/form-data에 필요함
-            const formData = new FormData();
 
-            formData.append("uploadImg", file, file.name);
-            formData.append("type", "E");//E는 excel의 줄임말
+            $("<li class='excelBox'><img src='/img/excel.png' /><label id='excelFileName'>"+file.name+"</label></li>").insertBefore("#excelBoxList li:last");
+            //json.url;
 
-            //여기서 ajax로 파일 업로드 수행
-            $.ajax({
-                url:"/data/uploadImage.json",
-                processData : false,//multipart/form-data
-                contentType : false,//multipart/form-data
-                data : formData,//multipart/form-data
-                type : 'POST',//multipart/form-data
-                dataType : "json",
-                error : function(xhr, error, code) {
-                    alert("에러:" + code);
-                },
-                success:function(json) {
-                    $("<li class='excelBox'><img src='"+json.url+"' /><label id='excelFileName'>"+file.name+"</label></li>").insertBefore("#excelBoxList li:last");
-                    //json.url;
+            if($(".excelBox").length==6) {
+                $(".registerBtn").css("display","none");
+            }//if end
 
-                    if($(".excelBox").length==6) {
-                        $(".registerBtn").css("display","none");
-                    }//if end
+            $(".excelBox img").on("click",function (){
 
-                    $(".excelBox img").on("click",function (){
-                        $(this).parent().remove();
+				const fileName = $(this).parent().children('label').text();
+				let spliceIdx = 0;
+				console.log(files);
+				for(let i =0; i<files.length; i++){
+					if(files[i].name == fileName){
+						 spliceIdx = i;
+					}
+				}
 
-                        if($(".excelBox").length<6) {
-                            $(".registerBtn").css("display","block");
-                        }//if end
-                    })//.imgBox click() end
-                }
-            });//$.ajax end
+				
+				//files=files.splice(spliceIdx);
+				//console.log(files);
+                
+                $(this).parent().remove();
+
+                if($(".excelBox").length<6) {
+                    $(".registerBtn").css("display","block");
+                }//if end
+            })//.imgBox click() end
 
         } else {
             alert("엑셀 선택해주세요!");
         }
     });//#imgFile change() end
 
+    $excelUploadRegister.click(function (e){
+    	console.log(files);
+    	const formData = new FormData();
+    });
+
     $excelUploadCancel.click(function (e){
         $(".excelBox img").parent().remove();
         $(".registerBtn").css("display","block");
+        files = [];
     });
 
     $dbSetting.click(function (e){
@@ -305,6 +146,8 @@
         $(".dbSettingWrap").removeClass("on");
         $("html").removeClass("popup");
     });
+
+   
 
 </script>
 </body>
