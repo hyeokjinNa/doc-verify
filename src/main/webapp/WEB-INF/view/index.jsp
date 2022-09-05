@@ -40,33 +40,33 @@
 
 <div class="dbSettingWrap">
     <div class="dbSettingBox">
-        <div class="dbSettingHeader">
-            <h2>DB 설정</h2>
-        </div>
-        <div class="dbSettingContent">
-            <form>
-                <div class="inputWrap">
-                    <h2>드라이버</h2>
-                    <input class="input-group "/>
-                </div>
-                <div class="inputWrap">
-                    <h2>아이피</h2>
-                    <input class="input-group"/>
-                </div>
-                <div class="inputWrap">
-                    <h2>아이디</h2>
-                    <input class="input-group"/>
-                </div>
-                <div class="inputWrap">
-                    <h2>비밀번호</h2>
-                    <input class="input-group"/>
-                </div>
-            </form>
-        </div>
-        <div class="dbSettingFooter">
-            <button class="register btn btn-primary">등록</button>
-            <button class="cancel btn btn-primary">취소</button>
-        </div>
+    	<form action="/register" method="post">
+	        <div class="dbSettingHeader">
+	            <h2>DB 설정</h2>
+	        </div>
+	        <div class="dbSettingContent">
+	                <div class="inputWrap">
+	                    <h2>드라이버</h2>
+	                    <input class="input-group "/>
+	                </div>
+	                <div class="inputWrap">
+	                    <h2>아이피</h2>
+	                    <input class="input-group"/>
+	                </div>
+	                <div class="inputWrap">
+	                    <h2>아이디</h2>
+	                    <input class="input-group"/>
+	                </div>
+	                <div class="inputWrap">
+	                    <h2>비밀번호</h2>
+	                    <input class="input-group"/>
+	                </div>
+	        </div>
+	        <div class="dbSettingFooter">
+	            <button class="register btn btn-primary">등록</button>
+	            <button class="cancel btn btn-primary">취소</button>
+	        </div>
+        </form>
     </div>
 </div>
 <c:import url="/WEB-INF/view/template/footer.jsp"/> 
@@ -99,18 +99,12 @@
 
             $(".excelBox img").on("click",function (){
 
-				const fileName = $(this).parent().children('label').text();
-				let spliceIdx = 0;
-				console.log(files);
-				for(let i =0; i<files.length; i++){
-					if(files[i].name == fileName){
-						 spliceIdx = i;
-					}
-				}
-
-				
-				//files=files.splice(spliceIdx);
-				//console.log(files);
+            	const fileName = $(this).parent().children('label').text();
+        		for(let i = 0; i < files.length; i++){
+        			if(files[i].name == fileName){
+    	    			files.splice(i,1);
+        			}
+        		}
                 
                 $(this).parent().remove();
 
@@ -125,8 +119,26 @@
     });//#imgFile change() end
 
     $excelUploadRegister.click(function (e){
-    	console.log(files);
     	const formData = new FormData();
+    	for(let i = 0; i < files.length; i++){
+			formData.append('files',files[i],files[i].name);
+        }
+		console.log(formData);
+        $.ajax({
+        	 url:"/ajax/uploadExcel",
+             processData : false,//multipart/form-data
+             contentType : false,//multipart/form-data
+             data : formData,//multipart/form-data
+             type : 'POST',//multipart/form-data
+             dataType : "json",
+             error : function(xhr, error, code) {
+                 alert("에러:" + code);
+             },
+             success:function(json) {
+                 console.log(json)
+             }
+        });
+        
     });
 
     $excelUploadCancel.click(function (e){

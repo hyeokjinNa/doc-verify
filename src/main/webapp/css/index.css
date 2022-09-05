@@ -156,3 +156,6 @@ html.popup{
         left:55%;
         bottom:20px;
     }
+    #content button{
+    	background-color: rgb(26, 37, 69);
+    }
