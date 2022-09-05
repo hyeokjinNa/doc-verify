@@ -3,18 +3,18 @@ package com.shy.docverify.dto;
 public class TableDTO {
 
 	private String schema;
-	private String table;
-	private String tableComment;
-	private String column;
-	private String columnComment;
-	private String type;
+	private String tableName;
+	private String entityName;
+	private String physicalName;
+	private String logicalName;
+	private String dataType;
+	private String length;
+	private String precision;
+	private String scale;
 	private String notNull;
 	private String pk;
-	private String verify;
+	private String match;
 	private String msg;
-	private int length;
-	private int precision;
-	private int scale;
 	
 	public String getSchema() {
 		return schema;
@@ -22,35 +22,53 @@ public class TableDTO {
 	public void setSchema(String schema) {
 		this.schema = schema;
 	}
-	public String getTable() {
-		return table;
+	public String getTableName() {
+		return tableName;
 	}
-	public void setTable(String table) {
-		this.table = table;
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
 	}
-	public String getTableComment() {
-		return tableComment;
+	public String getEntityName() {
+		return entityName;
 	}
-	public void setTableComment(String tableComment) {
-		this.tableComment = tableComment;
+	public void setEntityName(String entityName) {
+		this.entityName = entityName;
 	}
-	public String getColumn() {
-		return column;
+	public String getPhysicalName() {
+		return physicalName;
 	}
-	public void setColumn(String column) {
-		this.column = column;
+	public void setPhysicalName(String physicalName) {
+		this.physicalName = physicalName;
 	}
-	public String getColumnComment() {
-		return columnComment;
+	public String getLogicalName() {
+		return logicalName;
 	}
-	public void setColumnComment(String columnComment) {
-		this.columnComment = columnComment;
+	public void setLogicalName(String logicalName) {
+		this.logicalName = logicalName;
 	}
-	public String getType() {
-		return type;
+	public String getDataType() {
+		return dataType;
 	}
-	public void setType(String type) {
-		this.type = type;
+	public void setDataType(String dataType) {
+		this.dataType = dataType;
+	}
+	public String getLength() {
+		return length;
+	}
+	public void setLength(String length) {
+		this.length = length;
+	}
+	public String getPrecision() {
+		return precision;
+	}
+	public void setPrecision(String precision) {
+		this.precision = precision;
+	}
+	public String getScale() {
+		return scale;
+	}
+	public void setScale(String scale) {
+		this.scale = scale;
 	}
 	public String getNotNull() {
 		return notNull;
@@ -64,11 +82,11 @@ public class TableDTO {
 	public void setPk(String pk) {
 		this.pk = pk;
 	}
-	public String getVerify() {
-		return verify;
+	public String getMatch() {
+		return match;
 	}
-	public void setVerify(String verify) {
-		this.verify = verify;
+	public void setMatch(String match) {
+		this.match = match;
 	}
 	public String getMsg() {
 		return msg;
@@ -76,30 +94,13 @@ public class TableDTO {
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
-	public int getLength() {
-		return length;
-	}
-	public void setLength(int length) {
-		this.length = length;
-	}
-	public int getPrecision() {
-		return precision;
-	}
-	public void setPrecision(int precision) {
-		this.precision = precision;
-	}
-	public int getScale() {
-		return scale;
-	}
-	public void setScale(int scale) {
-		this.scale = scale;
-	}
 	
 	@Override
 	public String toString() {
-		return "TableDTO [schema=" + schema + ", table=" + table + ", tableComment=" + tableComment + ", column="
-				+ column + ", columnComment=" + columnComment + ", type=" + type + ", notNull=" + notNull + ", pk=" + pk
-				+ ", verify=" + verify + ", msg=" + msg + ", length=" + length + ", precision=" + precision + ", scale="
-				+ scale + "]";
+		return "TableDTO [schema=" + schema + ", tableName=" + tableName + ", entityName=" + entityName
+				+ ", physicalName=" + physicalName + ", logicalName=" + logicalName + ", dataType=" + dataType
+				+ ", length=" + length + ", precision=" + precision + ", scale=" + scale + ", notNull=" + notNull
+				+ ", pk=" + pk + ", match=" + match + ", msg=" + msg + "]";
 	}
+	
 }
