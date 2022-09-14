@@ -63,7 +63,8 @@
                             }
                         }
                         // 불일치한 컬럼도 빨간색
-                    }
+                    },
+                    {targets : 10, visible : false} // 불일치한 msg 안 보이게
                     // {responsivePriority : -3 , targets: 0}, // responsivePriority 숫자가 클수록 먼저 사라짐. 음수는 사라지지 않게
                     // {responsivePriority : -2 , targets: 1}
 				],
@@ -87,7 +88,9 @@
 			    },
                 stateSave : true, // 현재 상태를 보존
                 initComplete : function(settings, json){
-                    console.log('start');
+                    json.data.forEach(element => {
+                        console.log(element)
+                    });
                     // 맨 처음에 몇개 불일치인지, 전체에서 몇개인지. 퍼센트로도?
                 }
                 // drawCallBack : function(settings){
@@ -107,21 +110,20 @@
                 } else {
                     table.columns(9).search('').draw();
                 }
-            })
+            });
 
-            $("#resultTable tbody").on('click', 'tr', function(){
+            table.on('click', 'tr', function(){
                 var data = table.row(this).data(); // table.rows({selected:true}).data()
 
                 if(data.match == 'X') {
-                    table.row(this).css(cursor,'pointer');
                     alert(data.tableName + ' ' + data.entityName);
                 }
                 // 정의서 값, 디비 값 보여주기 (불일치일때만?)
-            })
+            });
             
             // 엑셀 다운은 검색 조건 하고 테이블 기준으로, 필터 걸어서 다운받을 수 있게끔 (못하면 바이)
             // 반응형, dom 하기
-            // 기준은 정의서 기준. 디비랑 안 맞는 거는 컬럼 따로 한 줄 추가해서 내용 보내주기로 함.
+            // 기준은 정의서 기준. 없으면 "data":null
         })
     </script>
 </head>
