@@ -15,6 +15,7 @@ public class TableDTO {
 	private String pk;
 	private String match;
 	private String msg;
+	private String type;
 	
 	public String getSchema() {
 		return schema;
@@ -94,13 +95,19 @@ public class TableDTO {
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	
 	@Override
 	public String toString() {
 		return "TableDTO [schema=" + schema + ", tableName=" + tableName + ", entityName=" + entityName
 				+ ", physicalName=" + physicalName + ", logicalName=" + logicalName + ", dataType=" + dataType
 				+ ", length=" + length + ", precision=" + precision + ", scale=" + scale + ", notNull=" + notNull
-				+ ", pk=" + pk + ", match=" + match + ", msg=" + msg + "]";
+				+ ", pk=" + pk + ", match=" + match + ", msg=" + msg + ", type=" + type + "]";
 	}
 	
 }
