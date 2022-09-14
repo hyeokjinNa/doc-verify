@@ -39,3 +39,16 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+.center {
+	text-align: center;
+}
+
+#resultTable td, #resultTable th {
+	text-align: center;
+}
+
+#resultBox {
+	width : 90%;
+	margin: 0 auto;
+}
