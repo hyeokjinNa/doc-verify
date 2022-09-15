@@ -120,10 +120,11 @@
 
     $excelUploadRegister.click(function (e){
     	const formData = new FormData();
+    	console.log(files);
     	for(let i = 0; i < files.length; i++){
-			formData.append('files',files[i],files[i].name);
+			formData.append('mfiles',files[i],files[i].name);
         }
-		console.log(formData);
+		
         $.ajax({
         	 url:"/ajax/uploadExcel",
              processData : false,//multipart/form-data
