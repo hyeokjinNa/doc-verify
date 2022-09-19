@@ -3,6 +3,7 @@ package com.shy.docverify.util;
 
 
 import java.io.File;
+import java.io.FileOutputStream;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +15,12 @@ public class ConvertFile {
 		File file = new File(mFile.getOriginalFilename());
 		
 		try {
-			mFile.transferTo(file);
+			
+			file.createNewFile();
+			FileOutputStream fos = new FileOutputStream(file);
+			fos.write(mFile.getBytes());
+			fos.close();
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
