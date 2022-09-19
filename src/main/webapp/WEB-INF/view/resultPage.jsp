@@ -3,18 +3,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>정의서, DB 비교 결과 페이지</title>
-	<link rel='stylesheet' type='text/css' media='screen' href='resources/css/style.css'>
-	<script type="text/javascript" src="http://code.jquery.com/jquery-3.3.1.js"></script>
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
-	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.12.1/pagination/simple_numbers_no_ellipses.js"></script>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.semanticui.min.css">
-	<link rel="stylesheet" href="resources/css/bootstrap.css">
-	<script type="text/javascript" src="resources/js/bootstrap.js"></script>
-	<script>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=chrome'>
+    <title>결과 페이지</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='resources/css/style.css'>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-3.3.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.12.1/pagination/simple_numbers_no_ellipses.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.semanticui.min.css">
+    <link rel="stylesheet" href="resources/css/bootstrap.css">
+    <script type="text/javascript" src="resources/js/bootstrap.js"></script>
+    <script>
         $.fn.DataTable.ext.pager.numbers_length = 5;
 
         $(function(){
@@ -34,7 +36,7 @@
                     {data : "preScale"},
                     {data : "pk"},
                     {data : "notNull"},
-                    {data : "match"}
+                    {data : "type"}
                 ],
                 lengthChange : true, // 표시 건수 기능 - 몇 건씩 보여줄지
                 searching : true, // 검색 기능
@@ -123,12 +125,12 @@
             
             // 엑셀 다운은 검색 조건 하고 테이블 기준으로, 필터 걸어서 다운받을 수 있게끔 (못하면 바이)
             // 반응형, dom 하기
-            // 기준은 정의서 기준. 없으면 "data":null
+            // tab으로
         })
     </script>
 </head>
 <body>
-	<div>
+    <div>
         <h2 class="center">정의서 일치 확인</h2>
     </div>
     <div class="center">
