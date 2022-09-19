@@ -1,5 +1,7 @@
 package com.shy.docverify.dto;
 
+import java.util.List;
+
 public class TableDTO {
 
 	private String schema;
@@ -13,9 +15,10 @@ public class TableDTO {
 	private String scale;
 	private String notNull;
 	private String pk;
-	private String match;
-	private String msg;
-	private String check;
+	private String type;
+	private List<String> wrongColumns;
+	private boolean match = false;
+	private boolean check = false;
 	
 	public String getSchema() {
 		return schema;
@@ -83,31 +86,29 @@ public class TableDTO {
 	public void setPk(String pk) {
 		this.pk = pk;
 	}
-	public String getMatch() {
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public List<String> getWrongColumn() {
+		return wrongColumns;
+	}
+	public void setWrongColumn(List<String> wrongColumns) {
+		this.wrongColumns = wrongColumns;
+	}
+	public boolean getMatch() {
 		return match;
 	}
-	public void setMatch(String match) {
+	public void setMatch(boolean match) {
 		this.match = match;
 	}
-	public String getMsg() {
-		return msg;
-	}
-	public void setMsg(String msg) {
-		this.msg = msg;
-	}
-	public String getCheck() {
+	public boolean getCheck() {
 		return check;
 	}
-	public void setCheck(String check) {
+	public void setCheck(boolean check) {
 		this.check = check;
-	}
-	
-	@Override
-	public String toString() {
-		return "TableDTO [schema=" + schema + ", tableName=" + tableName + ", entityName=" + entityName
-				+ ", physicalName=" + physicalName + ", logicalName=" + logicalName + ", dataType=" + dataType
-				+ ", length=" + length + ", precision=" + precision + ", scale=" + scale + ", notNull=" + notNull
-				+ ", pk=" + pk + ", match=" + match + ", msg=" + msg + ", check=" + check + "]";
 	}
 	
 }
