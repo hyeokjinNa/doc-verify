@@ -34,7 +34,6 @@ public class MainController {
 		List<File> files = new ArrayList<File>();
 		
 		for(MultipartFile mfile:mfiles) {
-			//multipartToFile -> 메서드 에러부터
 			File file = converFile.multipartToFile(mfile);
 			files.add(file);
 		}
