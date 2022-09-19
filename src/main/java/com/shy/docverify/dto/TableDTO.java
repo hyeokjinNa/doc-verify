@@ -15,6 +15,7 @@ public class TableDTO {
 	private String pk;
 	private String match;
 	private String msg;
+	private String check;
 	
 	public String getSchema() {
 		return schema;
@@ -94,14 +95,19 @@ public class TableDTO {
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
+	public String getCheck() {
+		return check;
+	}
+	public void setCheck(String check) {
+		this.check = check;
+	}
 	
 	@Override
 	public String toString() {
 		return "TableDTO [schema=" + schema + ", tableName=" + tableName + ", entityName=" + entityName
 				+ ", physicalName=" + physicalName + ", logicalName=" + logicalName + ", dataType=" + dataType
 				+ ", length=" + length + ", precision=" + precision + ", scale=" + scale + ", notNull=" + notNull
-				+ ", pk=" + pk + ", match=" + match + ", msg=" + msg + "]";
+				+ ", pk=" + pk + ", match=" + match + ", msg=" + msg + ", check=" + check + "]";
 	}
-
 	
 }
