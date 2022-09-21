@@ -64,20 +64,6 @@
                         createdCell : function(td, cellData, rowData, row, col) {
                             if(cellData == 'X') {
                                 $(td).css('color', 'red');
-                                $(table.row(row).node()).addClass('pointer');
-
-                                if(rowData.wrongColumns != null && rowData.type == 'doc') {
-
-                                    const columns = table.settings().init().columns;
-
-                                    for (let i=0; i< columns.length; i++) {
-                                        rowData.wrongColumns.forEach(wrong => {
-                                            if(columns[i].data == wrong) {
-                                                $(table.row(row).node()).find('td').eq(i).css('color', 'red'); // 값 불일치 컬럼 빨간색
-                                            }
-                                        })
-                                    }
-                                }
                             }
                         }
                     },
@@ -88,8 +74,23 @@
                     // {responsivePriority : -2 , targets: 1}
 				],
                 createdRow : function(row, data, dataIndex, cells) {
-                    if(data.type == 'doc' && data.match == 'X' && data.wrongColumns == null) { // 아예 없는 경우
-                        $(row).addClass('red');
+                    if(data.type == 'doc' && data.match == 'X') {
+                        $(row).addClass('pointer');
+
+                        if(data.wrongColumns == null) { // 아예 없는 경우
+                            $(row).addClass('red');
+
+                        } else {
+                            const columns = table.settings().init().columns;
+
+                            for (let i=0; i< columns.length; i++) {
+                                data.wrongColumns.forEach(wrong => {
+                                    if(columns[i].data == wrong) {
+                                        $('td', row).eq(i).css('color', 'red'); // 값 불일치 컬럼 빨간색
+                                    }
+                                })
+                            }
+                        }
                     }
                 },
                 language:
