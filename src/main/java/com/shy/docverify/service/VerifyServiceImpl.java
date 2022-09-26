@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.shy.docverify.dto.TableDTO;
-import com.shy.docverify.sql.DBInfoSql;
+import com.shy.docverify.dao.DBInfoSql;
 
 @Service
 public class VerifyServiceImpl implements VerifyService {
