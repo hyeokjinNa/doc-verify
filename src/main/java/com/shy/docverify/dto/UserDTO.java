@@ -9,7 +9,7 @@ public class UserDTO {
 
 	private UserDTO(UserBuilder builder) {
 		this.url = builder.url;
-		this.driver = builder.url;
+		this.driver = builder.driver;
 		this.userName = builder.userName;
 		this.password = builder.password;
 	}
