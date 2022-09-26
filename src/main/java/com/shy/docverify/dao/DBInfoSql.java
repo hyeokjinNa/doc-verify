@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.shy.docverify.dto.TableDTO;
+import com.shy.docverify.dto.UserDTO;
 import com.shy.docverify.util.ConvertSqlToString;
 
 @Service
@@ -21,10 +22,12 @@ public class DBInfoSql {
 	
 	public List<TableDTO> selectTableInfo(String owner, String table) {
 		
-		String url = "jdbc:tibero:thin:@10.47.39.125:8629:DB_D_GMD";
-		String driver = "com.tmax.tibero.jdbc.TbDriver";
-		String username = "GMDMF";
-		String password = "gmdmf";
+		UserDTO user = new UserDTO.UserBuilder()
+				.url("jdbc:tibero:thin:@10.47.39.125:8629:DB_D_GMD")
+				.driver("\"com.tmax.tibero.jdbc.TbDriver\"")
+				.userName("GMDMF")
+				.password("gmdmf")
+				.build();
 		
 		String sql = convert.Convert("sql/selectTableInfo.sql");
 		
@@ -36,9 +39,9 @@ public class DBInfoSql {
 		
 		try {
 			
-			Class.forName(driver);
+			Class.forName(user.getDriver());
 			
-			conn = DriverManager.getConnection(url, username, password);
+			conn = DriverManager.getConnection(user.getUrl(), user.getUserName(), user.getPassword());
 			pre = conn.prepareStatement(sql);
 			pre.setString(1, owner);
 			pre.setString(2, table);
