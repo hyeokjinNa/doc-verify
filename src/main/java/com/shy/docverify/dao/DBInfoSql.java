@@ -1,4 +1,4 @@
-package com.shy.docverify.sql;
+package com.shy.docverify.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -45,18 +45,19 @@ public class DBInfoSql {
 			result = pre.executeQuery();
 			
 			while(result.next()) {
-				TableDTO dto = new TableDTO();
-				dto.setSchema(result.getString(1));
-				dto.setTableName(result.getString(2));
-				dto.setEntityName(result.getString(3));
-				dto.setPhysicalName(result.getString(4));
-				dto.setLogicalName(result.getString(5));
-				dto.setDataType(result.getString(6));
-				dto.setLength(result.getString(7));
-				dto.setPrecision(result.getString(8));
-				dto.setScale(result.getString(9));
-				dto.setNotNull(result.getString(10));
-				dto.setPk(result.getString(11));
+				TableDTO dto = new TableDTO.TableBuilder()
+					.schema(result.getString(1))
+					.tableName(result.getString(2))
+					.entityName(result.getString(3))
+					.physicalName(result.getString(4))
+					.logicalName(result.getString(5))
+					.dataType(result.getString(6))
+					.length(result.getString(7))
+					.precision(result.getString(8))
+					.scale(result.getString(9))
+					.notNull(result.getString(10))
+					.pk(result.getString(11))
+					.build();
 				
 				list.add(dto);
 			}
