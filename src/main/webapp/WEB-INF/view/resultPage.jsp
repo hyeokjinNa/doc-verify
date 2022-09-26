@@ -7,24 +7,27 @@
     <meta http-equiv='X-UA-Compatible' content='IE=chrome'>
     <title>결과 페이지</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='resources/css/style.css'>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-3.3.1.js"></script>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/style.css'>
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.12.1/pagination/simple_numbers_no_ellipses.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.semanticui.min.css">
-    <link rel="stylesheet" href="resources/css/bootstrap.css">
-    <script type="text/javascript" src="resources/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
     <script>
         $.fn.DataTable.ext.pager.numbers_length = 5;
 
         $(function(){
             let checked;
+            let data = eval('(${data})');
 
             var table = $("#resultTable").DataTable({
 
-                ajax : "./data.json",
+                ajax : {
+                	dataSrc : '',
+                }
                 columns : [
                     {data : "tableName"},
                     {data : "entityName"},
@@ -62,8 +65,8 @@
                     {
                         targets : 9,
                         createdCell : function(td, cellData, rowData, row, col) {
-                            if(cellData == 'X') {
-                                $(td).css('color', 'red');
+                            if(cellData == false) {
+                                $(td).css('color', '#db2828');
                             }
                         }
                     },
@@ -74,7 +77,7 @@
                     // {responsivePriority : -2 , targets: 1}
 				],
                 createdRow : function(row, data, dataIndex, cells) {
-                    if(data.type == 'doc' && data.match == 'X') {
+                    if(data.type == 'doc' && data.match == false) {
                         $(row).addClass('pointer');
 
                         if(data.wrongColumns == null) { // 아예 없는 경우
@@ -82,11 +85,11 @@
 
                         } else {
                             const columns = table.settings().init().columns;
-
-                            for (let i=0; i< columns.length; i++) {
-                                data.wrongColumns.forEach(wrong => {
+                            
+                            for(let i=0; i< columns.length; i++) {
+                            	data.wrongColumns.forEach(wrong => {
                                     if(columns[i].data == wrong) {
-                                        $('td', row).eq(i).css('color', 'red'); // 값 불일치 컬럼 빨간색
+                                        $('td', row).eq(i).css('color', '#db2828'); // 값 불일치 컬럼 빨간색
                                     }
                                 })
                             }
@@ -106,7 +109,6 @@
                     search : "검색 : ",
                     zeroRecords : "검색 결과가 없습니다",
                     loadingRecords : "로딩중...",
-                    processing : "잠시만 기다려 주세요",
                     emptyTable : "데이터가 없습니다",
                     infoFiltered : "",
                     infoThousands : ","
@@ -127,22 +129,21 @@
             });
 
             $("input[name=matchRadio]").change(function(){
-                //checked = $("input[name=matchRadio]:checked").val();
                 checked = $(this).val();
 
                 if(checked == 'match') {
-                    table.columns(9).search('O').draw();
+                    table.columns(9).search(true).draw();
                 } else if(checked == 'notMatch') {
-                    table.columns(9).search('X').draw();
+                    table.columns(9).search(false).draw();
                 } else {
                     table.columns(9).search('').draw();
                 }
             });
 
             table.on('click', 'tr', function(){
-                var data = table.row(this).data(); // table.rows({selected:true}).data()
+                var data = table.row(this).data();
 
-                if(data.match == 'X') {
+                if(data.match == false) {
                     alert(data.tableName + ' ' + data.entityName);
                     // 불일치한 정보들 보여주기
                 }
@@ -155,8 +156,9 @@
             );
             
             // 엑셀 다운은 검색 조건 하고 테이블 기준으로, 필터 걸어서 다운받을 수 있게끔 (못하면 바이)
-            // 반응형, dom 하기
-            // tab으로
+            // tab으로 - 엑셀별로
+            // List<Map> - Map이 탭별로. 맵에는 excelName, db, doc
+            // 일치하지 않는 테이블들 db 조회해서 select로 다 보여주기
         })
     </script>
 </head>
