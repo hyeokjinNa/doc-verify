@@ -15,7 +15,6 @@ public class TableDTO {
 	private String scale;
 	private String notNull;
 	private String pk;
-	private String type;
 	private List<String> wrongColumns;
 	private boolean match;
 	private boolean check;
@@ -32,7 +31,6 @@ public class TableDTO {
 		this.scale = builder.scale;
 		this.notNull = builder.notNull;
 		this.pk = builder.pk;
-		this.type = builder.type;
 		this.wrongColumns = builder.wrongColumns;
 		this.match = builder.match;
 		this.check = builder.check;
@@ -80,10 +78,6 @@ public class TableDTO {
 
 	public String getPk() {
 		return pk;
-	}
-
-	public String getType() {
-		return type;
 	}
 
 	public List<String> getWrongColumns() {
@@ -142,10 +136,6 @@ public class TableDTO {
 		this.pk = pk;
 	}
 
-	public void setType(String type) {
-		this.type = type;
-	}
-
 	public void setWrongColumns(List<String> wrongColumns) {
 		this.wrongColumns = wrongColumns;
 	}
@@ -163,8 +153,7 @@ public class TableDTO {
 		return "TableDTO [schema=" + schema + ", tableName=" + tableName + ", entityName=" + entityName
 				+ ", physicalName=" + physicalName + ", logicalName=" + logicalName + ", dataType=" + dataType
 				+ ", length=" + length + ", precision=" + precision + ", scale=" + scale + ", notNull=" + notNull
-				+ ", pk=" + pk + ", type=" + type + ", wrongColumns=" + wrongColumns + ", match=" + match + ", check="
-				+ check + "]";
+				+ ", pk=" + pk + ", wrongColumns=" + wrongColumns + ", match=" + match + ", check=" + check + "]";
 	}
 
 	public static class TableBuilder {
@@ -180,7 +169,6 @@ public class TableDTO {
 		private String scale;
 		private String notNull;
 		private String pk;
-		private String type;
 		private List<String> wrongColumns;
 		private boolean match = false;
 		private boolean check = false;
@@ -237,11 +225,6 @@ public class TableDTO {
 
 		public TableBuilder pk(String pk) {
 			this.pk = pk;
-			return this;
-		}
-
-		public TableBuilder type(String type) {
-			this.type = type;
 			return this;
 		}
 
