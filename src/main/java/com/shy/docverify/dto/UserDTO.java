@@ -9,6 +9,9 @@ public class UserDTO {
 
 	private UserDTO(UserBuilder builder) {
 		this.url = builder.url;
+		this.driver = builder.url;
+		this.userName = builder.userName;
+		this.password = builder.password;
 	}
 
 	public String getUrl() {
@@ -73,6 +76,11 @@ public class UserDTO {
 		public UserBuilder password(String password) {
 			this.password = password;
 			return this;
+		}
+		
+		public UserDTO build() {
+			UserDTO dto = new UserDTO(this);
+			return dto;
 		}
 	}
 
