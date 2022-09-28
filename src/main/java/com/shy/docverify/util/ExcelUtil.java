@@ -2,12 +2,17 @@ package com.shy.docverify.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
+
+import com.shy.docverify.dto.TableDTO;
 
 @Service
 public class ExcelUtil {
@@ -32,24 +37,29 @@ public class ExcelUtil {
 			
 			FileInputStream fis = new FileInputStream(file);
 			XSSFWorkbook workbook = new XSSFWorkbook(fis);
+			List<TableDTO> tableList = new ArrayList<TableDTO>();
 			
 			int rowindex = 0;
 			int columnindex = 0;
 			
-			int sheetCount = workbook.getNumberOfSheets();
+			XSSFSheet sheet = workbook.getSheetAt(3);
+			XSSFCell cell = null;
 			
-			for(int i = 0; i<sheetCount; i++) {
+			int rows = sheet.getPhysicalNumberOfRows();				
+			int cells = sheet.getRow(0).getPhysicalNumberOfCells(); 
+			
+			for(int r = 0; r<rows; r++) {
+				XSSFRow row = sheet.getRow(r);
+				if(row != null) {
+					for(int c = 0; c<cells; c++) {
+						cell = row.getCell(c);
+						
+					}//for cells end
 					
-				XSSFSheet sheet = workbook.getSheetAt(i);
+				}//if row null end
 				
-				int rows = sheet.getPhysicalNumberOfRows();				
-				int cells = sheet.getRow(i).getPhysicalNumberOfCells(); 
-				
-				for(int r = 0; r<rows; r++) {
-					
-				}
-				
-			}
+			}//for rows end
+			
 			
 		}catch (Exception e) {
 			e.printStackTrace();

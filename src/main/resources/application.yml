@@ -7,4 +7,7 @@ spring:
       prefix: /WEB-INF/view/
       suffix: .jsp
     hiddenmethod:      filter:        enabled: true   #PUT, DELETE 사용
- 
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
