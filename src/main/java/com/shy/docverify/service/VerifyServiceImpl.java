@@ -9,6 +9,7 @@ import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.shy.docverify.dto.ParameterDTO;
 import com.shy.docverify.dto.TableDTO;
 import com.shy.docverify.dao.DBInfoSql;
 
@@ -25,11 +26,14 @@ public class VerifyServiceImpl implements VerifyService {
 	}
 	
 	@Override
-	public Map<String, Object> verifyTables(List<TableDTO> firstTable, List<TableDTO> secondTable) {
+	public Map<String, Object> verifyTables(ParameterDTO firstParam, ParameterDTO secondParam) {
 
 		String[] tableKeys = {"TableName", "PhysicalName", "EntityName", "LogicalName", "DataType", "Length",
 				"Precision", "Scale", "NotNull", "Pk" };
 
+		List<TableDTO> firstTable = firstParam.getTableDTO();
+		List<TableDTO> secondTable = secondParam.getTableDTO();
+		
 		Map<String, Object> result = new HashMap();
 
 		for (int i = 0; i < firstTable.size(); i++) {
@@ -55,9 +59,8 @@ public class VerifyServiceImpl implements VerifyService {
 						
 						if (!StringUtils.equals(firstRow.get(col), secondRow.get(col))) {
 							
-							match = false;
-
 							List<String> wrongColumns = firstTable.get(i).getWrongColumns();
+							match = false;
 
 							wrongColumns.add(tableKeys[i]);
 							
@@ -70,7 +73,6 @@ public class VerifyServiceImpl implements VerifyService {
 					firstTable.get(i).setMatch(match);
 					secondTable.get(j).setMatch(match);
 					
-					
 					break;
 				}
 
@@ -78,8 +80,8 @@ public class VerifyServiceImpl implements VerifyService {
 			
 		}
 		
-		result.put("DOC", firstTable);
-		result.put("DB", secondTable);
+		result.put(firstParam.getName(), firstTable);
+		result.put(secondParam.getName(), secondTable);
 
 		return result;
 	}
