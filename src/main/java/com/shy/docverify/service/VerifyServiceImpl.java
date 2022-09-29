@@ -86,6 +86,65 @@ public class VerifyServiceImpl implements VerifyService {
 		return result;
 	}
 	
+	@Override
+	public Map<String, Object> verifySelectTable (ParameterDTO firstParam, ParameterDTO secondParam) {
+		
+		String[] tableKeys = {"TableName", "PhysicalName", "EntityName", "LogicalName", "DataType", "Length",
+				"Precision", "Scale", "NotNull", "Pk" };
+		Map<String, Object> result = new HashMap();
+		
+		List<TableDTO> firstTableList = firstParam.getTableDTO();
+		List<TableDTO> secondTableList = secondParam.getTableDTO();
+		
+		for (TableDTO firstTable : firstTableList) {
+
+			List<String> firstRow = setRowList(firstTable);
+			
+			for(TableDTO secondTable : secondTableList) {
+				
+				List<String> secondRow = setRowList(secondTable);
+				boolean match = true;
+				
+				if(StringUtils.equals(firstRow.get(1), secondRow.get(1))) {
+
+					firstTable.setCheck(true);
+					secondTable.setCheck(true);
+					
+					for (int col = 2; col < tableKeys.length; col++) {
+						
+						if (!StringUtils.equals(firstRow.get(col), secondRow.get(col))) {
+							
+							List<String> wrongColumns = firstTable.getWrongColumns();
+							match = false;
+
+							if(wrongColumns == null) 
+								wrongColumns = new ArrayList<String>();
+							
+							wrongColumns.add(tableKeys[col]);
+							
+							firstTable.setWrongColumns(wrongColumns);
+							secondTable.setWrongColumns(wrongColumns);
+						}
+						
+					}
+					
+					firstTable.setMatch(match);
+					secondTable.setMatch(match);
+					
+					break;
+				
+				}
+
+			}
+			
+		}
+		
+		result.put(firstParam.getName(), firstTableList);
+		result.put(secondParam.getName(), secondTableList);
+		
+		return result;
+	}
+	
 	public List<String> setRowList(TableDTO dto) {
 
 		List<String> list = new ArrayList();

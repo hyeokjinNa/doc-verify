@@ -12,4 +12,6 @@ public interface VerifyService {
 	
 	public Map<String, Object> verifyTables(ParameterDTO firstTable, ParameterDTO secondTable);
 	
+	public Map<String, Object> verifySelectTable (ParameterDTO firstParam, ParameterDTO secondParam);
+	
 }
