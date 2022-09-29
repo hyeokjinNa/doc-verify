@@ -20,6 +20,31 @@ public class DBInfoSql {
 	@Autowired
 	private ConvertSqlToString convert;
 	
+	
+	public boolean connectionTest(UserDTO user) {
+		
+		boolean check = false;
+		Connection conn = null;
+		
+		try {
+			Class.forName(user.getDriver());
+			conn = DriverManager.getConnection(user.getUrl(), user.getUserName(), user.getPassword());
+			check = true;
+			System.out.println("User Login Success");
+		} catch(Exception e) {
+			check = false;
+			System.out.println("User Login Failed");
+		} finally {
+			try {
+				if(conn != null) conn.close();
+			} catch(Exception e) {
+				System.out.println("close Error");
+			}
+		}
+
+		return check;
+	}
+	
 	public List<TableDTO> selectTableInfo(String owner, String table) {
 		
 		UserDTO user = new UserDTO.UserBuilder()
@@ -77,7 +102,44 @@ public class DBInfoSql {
 				System.out.println("close Error");
 			}
 		}
+
+		return list;
+	}
+	
+	public List<String> selectTableList(String schema, UserDTO user) {
 		
+		
+		String sql = convert.Convert("sql/selectTables.sql");
+		List<String> list = new ArrayList();
+		
+		Connection conn = null;
+		PreparedStatement pre = null;
+		ResultSet result = null;
+		
+		try {
+			
+			Class.forName(user.getDriver());
+			
+			conn = DriverManager.getConnection(user.getUrl(), user.getUserName(), user.getPassword());
+			pre = conn.prepareStatement(sql);
+			pre.setString(1, schema);
+			result = pre.executeQuery();
+			
+			while(result.next()) {
+				list.add(result.getString(1));
+			}
+			
+		} catch(Exception e) {
+			System.out.println("Connection Error");
+		} finally {
+			try {
+				if(result != null) result.close();
+				if(pre != null) pre.close();
+				if(conn != null) conn.close();
+			} catch(Exception e) {
+				System.out.println("close Error");
+			}
+		}
 		
 		return list;
 	}
