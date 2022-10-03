@@ -50,9 +50,33 @@ public class ExcelUtil {
 			
 			for(int r = 0; r<rows; r++) {
 				XSSFRow row = sheet.getRow(r);
+				
 				if(row != null) {
 					for(int c = 0; c<cells; c++) {
 						cell = row.getCell(c);
+						
+						if(cell != null) {
+							String value = "";
+							switch (cell.getCellTypeEnum()) {
+							case NUMERIC:
+								value = String.valueOf(new Double(cell.getNumericCellValue()).intValue());
+								break;
+							case STRING:
+								value = cell.getStringCellValue();
+								break;
+							case FORMULA:
+								value = cell.getStringCellValue();
+								break;
+							case BLANK:
+								break;
+							case BOOLEAN:
+								value = String.valueOf(cell.getBooleanCellValue());
+								break;
+
+							}
+							System.out.println(value);
+						}
+						
 						
 					}//for cells end
 					

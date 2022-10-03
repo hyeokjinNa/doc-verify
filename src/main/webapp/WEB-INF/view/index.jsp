@@ -100,6 +100,7 @@
            //multipart/form-data에 필요함
            
            $(".registerBtn label").attr('id','excelFileName').text(file.name);
+           $(".registerBtn input").attr('name','mfiles');
            $(".registerBtn label").parent().removeClass("registerBtn");
 	       $("<img src='/img/excel.png' />").insertAfter("#excelBoxList input:last");
            $("<li class='excelBox registerBtn'><input mutiple type='file' id='excelFile' style='display:none;'><label for='excelFile' id='excelUpload'>+</label></li>").insertAfter("#excelBoxList li:last");
