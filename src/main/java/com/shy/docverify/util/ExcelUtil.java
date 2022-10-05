@@ -48,11 +48,13 @@ public class ExcelUtil {
 			int rows = sheet.getPhysicalNumberOfRows();				
 			int cells = sheet.getRow(0).getPhysicalNumberOfCells(); 
 			
-			for(int r = 0; r<rows; r++) {
+			for(int r = 2; r<rows; r++) {
 				XSSFRow row = sheet.getRow(r);
 				
 				if(row != null) {
-					for(int c = 0; c<cells; c++) {
+					TableDTO toBeTable = new TableDTO();
+					TableDTO asIsTable = new TableDTO();
+					for(int c = 1; c<cells; c++) {
 						cell = row.getCell(c);
 						
 						if(cell != null) {
@@ -74,16 +76,80 @@ public class ExcelUtil {
 								break;
 
 							}
-							System.out.println(value);
+							
+							switch(c) {
+							case 1:
+								toBeTable.setTableName("C_"+value+"_VA");
+								break;
+							case 2:
+								toBeTable.setEntityName(value);
+							case 3:
+								toBeTable.setLogicalName(value);
+								break;
+							case 4:
+								toBeTable.setPhysicalName(value);
+								break;
+							case 5:
+								toBeTable.setDataType(value);
+								break;
+							case 6:
+								toBeTable.setLength(value);
+								break;
+							case 7:
+								toBeTable.setNotNull(value);
+								break;
+							case 8:
+								if(!value.equals("")) {
+									toBeTable.setPk(value);
+								}else {
+									toBeTable.setPk("N");
+								}
+								break;
+							case 9:
+								asIsTable.setTableName(value);
+								break;
+							case 10:
+								asIsTable.setEntityName(value);
+								break;
+							case 11:
+								asIsTable.setLogicalName(value);
+								break;
+							case 12:
+								asIsTable.setPhysicalName(value);
+								break;
+							case 13:
+								asIsTable.setDataType(value);
+								break;
+							case 14:
+								asIsTable.setLength(value);
+								break;
+							case 15:
+								asIsTable.setLength(value);
+								break;
+							case 16:
+								asIsTable.setNotNull(value);
+								break;
+							case 17:
+								if(!value.equals("")) {
+									asIsTable.setPk(value);
+								}else {
+									asIsTable.setPk("N");
+								}
+								break;
+							case 18:
+								break;
+							}
+							
 						}
 						
 						
 					}//for cells end
+					tableList.add(toBeTable);
+					tableList.add(asIsTable);
 					
 				}//if row null end
 				
 			}//for rows end
-			
 			
 		}catch (Exception e) {
 			e.printStackTrace();

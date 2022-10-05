@@ -19,6 +19,10 @@ public class TableDTO {
 	private boolean match;
 	private boolean check;
 
+	public TableDTO() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	private TableDTO(TableBuilder builder) {
 		this.schema = builder.schema;
 		this.tableName = builder.tableName;
