@@ -12,6 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
+import com.shy.docverify.config.ExtractType;
 import com.shy.docverify.dto.TableDTO;
 
 @Service
@@ -38,9 +39,6 @@ public class ExcelUtil {
 			FileInputStream fis = new FileInputStream(file);
 			XSSFWorkbook workbook = new XSSFWorkbook(fis);
 			List<TableDTO> tableList = new ArrayList<TableDTO>();
-			
-			int rowindex = 0;
-			int columnindex = 0;
 			
 			XSSFSheet sheet = workbook.getSheetAt(3);
 			XSSFCell cell = null;
@@ -74,74 +72,72 @@ public class ExcelUtil {
 							case BOOLEAN:
 								value = String.valueOf(cell.getBooleanCellValue());
 								break;
-
 							}
 							
-							switch(c) {
-							case 1:
+							if(c==9 || c>16) {
+								continue;
+							}
+							//asis 확인부터
+							switch(ExtractType.values()[c-1]) {
+							case TOBE_TABLENAME:
 								toBeTable.setTableName("C_"+value+"_VA");
 								break;
-							case 2:
+							case TOBE_ENTITYNAME:
 								toBeTable.setEntityName(value);
-							case 3:
+							case TOBE_LOGICALNAME:
 								toBeTable.setLogicalName(value);
 								break;
-							case 4:
+							case TOBE_PHYSICALNAME:
 								toBeTable.setPhysicalName(value);
 								break;
-							case 5:
+							case TOBE_DATATYPE:
 								toBeTable.setDataType(value);
 								break;
-							case 6:
+							case TOBE_LENGTH:
 								toBeTable.setLength(value);
 								break;
-							case 7:
+							case TOBE_NOTNULL:
 								toBeTable.setNotNull(value);
 								break;
-							case 8:
+							case TOBE_PK:
 								if(!value.equals("")) {
 									toBeTable.setPk(value);
 								}else {
 									toBeTable.setPk("N");
 								}
 								break;
-							case 9:
+							case ASIS_TABLENAME:
 								asIsTable.setTableName(value);
 								break;
-							case 10:
+							case ASIS_ENTITYNAME:
 								asIsTable.setEntityName(value);
 								break;
-							case 11:
+							case ASIS_LOGICALNAME:
 								asIsTable.setLogicalName(value);
 								break;
-							case 12:
+							case ASIS_PHYSICALNAME:
 								asIsTable.setPhysicalName(value);
 								break;
-							case 13:
+							case ASIS_DATATYPE:
 								asIsTable.setDataType(value);
 								break;
-							case 14:
+							case ASIS_LENGTH:
 								asIsTable.setLength(value);
 								break;
-							case 15:
-								asIsTable.setLength(value);
-								break;
-							case 16:
+							case ASIS_NOTNULL:
 								asIsTable.setNotNull(value);
 								break;
-							case 17:
+							case ASIS_PK:
 								if(!value.equals("")) {
 									asIsTable.setPk(value);
 								}else {
 									asIsTable.setPk("N");
 								}
 								break;
-							case 18:
-								break;
-							}
 							
-						}
-						
+							}//switch end
+							
+						}//if cell end
 						
 					}//for cells end
 					tableList.add(toBeTable);

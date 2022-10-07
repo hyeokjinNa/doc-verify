@@ -34,7 +34,7 @@ public class MainController {
 		return "index";
 	}
 	
-	@PostMapping("/ajax/uploadExcel")
+	@PostMapping("/excelRegister")
 	public String uploadExcel(List<MultipartFile> mfiles) {
 		List<File> files = new ArrayList<File>();
 		
