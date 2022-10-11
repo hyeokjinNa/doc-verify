@@ -42,6 +42,9 @@ public class ExcelUtil {
 			
 			XSSFSheet sheet = workbook.getSheetAt(3);
 			XSSFCell cell = null;
+			int valueNum = 0;
+			String toBeSchema="";
+			String[] delimeter= null;
 			
 			int rows = sheet.getPhysicalNumberOfRows();				
 			int cells = sheet.getRow(0).getPhysicalNumberOfCells(); 
@@ -77,10 +80,17 @@ public class ExcelUtil {
 							if(c==9 || c>16) {
 								continue;
 							}
+							if(c>9) {
+								valueNum = c-2;
+							}else {
+								valueNum = c-1;
+							}
 							//asis 확인부터
-							switch(ExtractType.values()[c-1]) {
+							switch(ExtractType.values()[valueNum]) {
 							case TOBE_TABLENAME:
 								toBeTable.setTableName("C_"+value+"_VA");
+								toBeSchema="TOBE"+value.substring(0,4);
+								toBeTable.setSchema(toBeSchema);
 								break;
 							case TOBE_ENTITYNAME:
 								toBeTable.setEntityName(value);
@@ -88,16 +98,29 @@ public class ExcelUtil {
 								toBeTable.setLogicalName(value);
 								break;
 							case TOBE_PHYSICALNAME:
-								toBeTable.setPhysicalName(value);
+								toBeTable.setPhysicalName("PV_"+value);
 								break;
 							case TOBE_DATATYPE:
 								toBeTable.setDataType(value);
 								break;
 							case TOBE_LENGTH:
-								toBeTable.setLength(value);
+								if(value.contains(",")) {
+									delimeter=value.split(",");
+									toBeTable.setPrecision(delimeter[0]);
+									toBeTable.setScale(delimeter[1]);
+									toBeTable.setLength("22");
+									delimeter=null;
+								}else {
+									
+									toBeTable.setLength(value);
+								}
 								break;
 							case TOBE_NOTNULL:
-								toBeTable.setNotNull(value);
+								if(!value.equals("")) {
+									toBeTable.setNotNull("Y");
+								}else {
+									toBeTable.setNotNull("N");
+								}
 								break;
 							case TOBE_PK:
 								if(!value.equals("")) {
@@ -107,6 +130,7 @@ public class ExcelUtil {
 								}
 								break;
 							case ASIS_TABLENAME:
+								asIsTable.setSchema("GMDMI");
 								asIsTable.setTableName(value);
 								break;
 							case ASIS_ENTITYNAME:
@@ -122,10 +146,22 @@ public class ExcelUtil {
 								asIsTable.setDataType(value);
 								break;
 							case ASIS_LENGTH:
-								asIsTable.setLength(value);
+								if(value.contains(",")) {
+									delimeter=value.split(",");
+									asIsTable.setPrecision(delimeter[0]);
+									asIsTable.setScale(delimeter[1]);
+									asIsTable.setLength("22");
+									delimeter=null;
+								}else {
+									asIsTable.setLength(value);
+								}
 								break;
 							case ASIS_NOTNULL:
-								asIsTable.setNotNull(value);
+								if(!value.equals("")) {
+									asIsTable.setNotNull("Y");
+								}else {
+									asIsTable.setNotNull("N");
+								}
 								break;
 							case ASIS_PK:
 								if(!value.equals("")) {
