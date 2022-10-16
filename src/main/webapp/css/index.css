@@ -47,8 +47,9 @@ html.popup{
         top:40px;
     }
     .excelDownLoadWrapBtn {
-        margin-left: 240px;
-        margin-top: 40px;
+        position: absolute;
+        left:80%;
+        top:40px;
     }
     #excelBoxList {
         margin-left : 100px;
@@ -93,12 +94,12 @@ html.popup{
     #btnWrap .register{
         position: absolute;
         left:46%;
-        bottom:50px;
+        bottom:8%;
     }
     #btnWrap .cancel{
         position: absolute;
-        left:50%;
-        bottom:50px;
+        left:51%;
+        bottom:8%;
     }
     .dbSettingWrap{
         position: fixed;

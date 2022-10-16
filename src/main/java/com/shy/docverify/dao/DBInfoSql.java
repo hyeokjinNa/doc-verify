@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 
 import com.shy.docverify.dto.TableDTO;
 import com.shy.docverify.dto.UserDTO;
-import com.shy.docverify.util.ConvertSqlToString;
+import com.shy.docverify.util.ConvertUtil;
 
 @Service
 public class DBInfoSql {
 	
 	@Autowired
-	private ConvertSqlToString convert;
+	private ConvertUtil convert;
 	
 	
 	public boolean connectionTest(UserDTO user) {
@@ -54,7 +54,7 @@ public class DBInfoSql {
 				.password("gmdmf")
 				.build();
 		
-		String sql = convert.Convert("sql/selectTableInfo.sql");
+		String sql = convert.convertSqlToString("sql/selectTableInfo.sql");
 		
 		List<TableDTO> list = new ArrayList<>();
 		
@@ -109,7 +109,7 @@ public class DBInfoSql {
 	public List<String> selectTableList(String schema, UserDTO user) {
 		
 		
-		String sql = convert.Convert("sql/selectTables.sql");
+		String sql = convert.convertSqlToString("sql/selectTables.sql");
 		List<String> list = new ArrayList();
 		
 		Connection conn = null;

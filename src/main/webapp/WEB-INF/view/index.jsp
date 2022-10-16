@@ -42,31 +42,31 @@
 
 <div class="dbSettingWrap">
     <div class="dbSettingBox">
-    	<form action="/dbRegister" method="post">
+    	<form action="/dbLogin" method="post">
 	        <div class="dbSettingHeader">
 	            <h2>DB 설정</h2>
 	        </div>
 	        <div class="dbSettingContent">
 	                <div class="inputWrap">
 	                    <h2>url</h2>
-	                    <input class="input-group "/>
+	                    <input name="url" class="input-group "/>
 	                </div>
 	                <div class="inputWrap">
 	                    <h2>driver</h2>
-	                    <input class="input-group"/>
+	                    <input name="driver" class="input-group"/>
 	                </div>
 	                <div class="inputWrap">
-	                    <h2>username</h2>
-	                    <input class="input-group"/>
+	                    <h2>userName</h2>
+	                    <input name="userName" class="input-group"/>
 	                </div>
 	                <div class="inputWrap">
 	                    <h2>password</h2>
-	                    <input class="input-group"/>
+	                    <input name="password" class="input-group"/>
 	                </div>
 	        </div>
 	        <div class="dbSettingFooter">
 	            <button class="register btn btn-primary">등록</button>
-	            <button class="cancel btn btn-primary">취소</button>
+	            <button type="button" class="cancel btn btn-primary">취소</button>
 	        </div>
         </form>
     </div>
@@ -77,7 +77,7 @@
 
 <script type="text/javascript">
     const $dbSetting = $("#dbSettingBtn");
-    const $excelUploadRegister = $("#btnWrap .register");
+    const $dbLogin = $(".dbSettingFooter .register");
     const $excelUploadCancel = $("#btnWrap .cancel");
     const $dbSettingCancel = $(".dbSettingFooter .cancel");
     let files = [];
@@ -131,34 +131,7 @@
         
        }//for end
     });//#imgFile change() end
-
-    $excelUploadRegister.click(function (e){
-    	
-    	/* const formData = new FormData();
-    	console.log(files);
-    	for(let i = 0; i < files.length; i++){
-			formData.append('mfiles',files[i],files[i].name);
-        }
-
-		const req = new XMLHttpRequest();
-		req.open("POST","/ajax/uploadExcel",true);
-		req.send(formData); */
-        /* $.ajax({
-        	 url:"/ajax/uploadExcel",
-             processData : false,//multipart/form-data
-             contentType : false,//multipart/form-data
-             data : formData,//multipart/form-data
-             type : 'POST',//multipart/form-data
-             dataType : "json",
-             error : function(xhr, error, code) {
-                 alert("에러:" + code);
-             },
-             success:function(json) {
-                 console.log(json)
-             }
-        }); */
-        
-    }); 
+    
 
     $excelUploadCancel.click(function (e){
         $(".excelBox img").parent().remove();

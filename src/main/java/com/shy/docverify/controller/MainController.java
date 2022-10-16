@@ -7,27 +7,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
+import com.shy.docverify.dao.DBInfoSql;
 import com.shy.docverify.dto.TableDTO;
 import com.shy.docverify.dto.TableDTO.TableBuilder;
-import com.shy.docverify.util.ConvertFile;
+import com.shy.docverify.dto.UserDTO;
+import com.shy.docverify.util.ConvertUtil;
 import com.shy.docverify.util.ExcelUtil;
 
 @Controller
 public class MainController {
 	
 	@Autowired
-	private ConvertFile converFile;
+	private ConvertUtil converFile;
 	
 	@Autowired
 	private ExcelUtil excelUtil;
+	
+	@Autowired
+	private DBInfoSql dbInfo;
 
 	@GetMapping("/")
 	public String main() {
@@ -46,6 +54,19 @@ public class MainController {
 		
 		return null;
 	}
+	
+	@PostMapping("/dbLogin")
+	public String dbLogin(UserDTO user, HttpSession session, RedirectAttributes ra) {
+		Boolean check = dbInfo.connectionTest(user);
+		if(check == true) {
+			session.setAttribute("loginMember", user);
+		}else {
+			ra.addFlashAttribute("msg","DB 세팅 정보가 맞지 않습니다");
+		}
+		
+		return "index";
+	}
+	
 	
 	@GetMapping("/result")
 	public String result(Model model) {

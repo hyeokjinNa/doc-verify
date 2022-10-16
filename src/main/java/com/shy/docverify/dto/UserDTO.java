@@ -7,6 +7,10 @@ public class UserDTO {
 	private String userName;
 	private String password;
 
+	public UserDTO() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	private UserDTO(UserBuilder builder) {
 		this.url = builder.url;
 		this.driver = builder.driver;
