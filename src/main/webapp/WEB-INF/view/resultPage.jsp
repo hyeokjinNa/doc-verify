@@ -25,9 +25,7 @@
 
             var table = $("#resultTable").DataTable({
 
-                ajax : {
-                	dataSrc : '',
-                }
+                data : data[1].doc,
                 columns : [
                     {data : "tableName"},
                     {data : "entityName"},
@@ -35,7 +33,7 @@
                     {data : "logicalName"},
                     {data : "dataType"},
                     {data : "length"},
-                    {data : "preScale"},
+                    {data : "precision"},
                     {data : "pk"},
                     {data : "notNull"},
                     {data : "match"},
@@ -63,10 +61,41 @@
 			      	{orderable: true, targets :[0,2]},
                     {orderable: false, targets :[1,3,4,5,6,7,8,9]},
                     {
+                    	targets : 0,
+                    	render : function(data, type, row) {
+                    		return row.schema + "." + data;
+                    	}
+                    },
+                    {
+                    	targets : 6,
+                    	render : function(data, type, row) {
+                    		return row.scale == null ? data : data + "," + row.scale;
+                    	}
+                    },
+                    {
+                    	targets : 7,
+                    	render : function(data, type, row) {
+                    		return data == 'Y' ? data : '';
+                    	}
+                    },
+                    {
+                    	targets : 8,
+                    	render : function(data, type, row) {
+                    		return data == 'Y' ? data : '';
+                    	}
+                    },
+                    {
                         targets : 9,
                         createdCell : function(td, cellData, rowData, row, col) {
-                            if(cellData == false) {
+                            $(td).html('O');
+                            
+                            if(!cellData) {
                                 $(td).css('color', '#db2828');
+                                $(td).html('X');
+                            }
+                            
+                            if(!rowData.match) {
+                            	$(row).addClass('red');
                             }
                         }
                     },
@@ -76,11 +105,11 @@
                     // {responsivePriority : -3 , targets: 0}, // responsivePriority 숫자가 클수록 먼저 사라짐. 음수는 사라지지 않게
                     // {responsivePriority : -2 , targets: 1}
 				],
-                createdRow : function(row, data, dataIndex, cells) {
-                    if(data.type == 'doc' && data.match == false) {
+                createdRow : function(row, data, dataIndex, cells) { // 수정하
+                    if(data.match = false) {
                         $(row).addClass('pointer');
 
-                        if(data.wrongColumns == null) { // 아예 없는 경우
+                        if(!data.check) { // 아예 없는 경우
                             $(row).addClass('red');
 
                         } else {
@@ -143,17 +172,19 @@
             table.on('click', 'tr', function(){
                 var data = table.row(this).data();
 
-                if(data.match == false) {
+                if(!data.match) {
                     alert(data.tableName + ' ' + data.entityName);
                     // 불일치한 정보들 보여주기
                 }
             });
 
+            /*
             $.fn.dataTable.ext.search.push( // 정의서 값만 보여주기
                 function(settings, data, dataIndex) {
                     return data[10] == 'doc';
                 }
             );
+            */
             
             // 엑셀 다운은 검색 조건 하고 테이블 기준으로, 필터 걸어서 다운받을 수 있게끔 (못하면 바이)
             // tab으로 - 엑셀별로
@@ -180,7 +211,7 @@
             <option value="TB_BL01I_001">TB_BL01I_001</option>
         </select>
     </div>
-    <div id="resultBox">
+    <div id="resultWrap">
         <table id="resultTable" class="table ui celled">
             <thead>
                 <tr>

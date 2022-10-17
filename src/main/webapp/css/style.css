@@ -48,7 +48,11 @@ table {
 	text-align: center;
 }
 
-#resultBox {
+#resultWrap {
 	width : 90%;
 	margin: 0 auto;
+}
+
+.pointer {
+	cursor : pointer;
 }
