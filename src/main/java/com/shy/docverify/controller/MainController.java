@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -170,7 +169,8 @@ public class MainController {
 		data.add(map);
 		data.add(map2);
 		
-		model.addAttribute("data", new Gson().toJson(data));
+		model.addAttribute("dataJson", new Gson().toJson(data));
+		model.addAttribute("data", data);
 		return "resultPage";
 	}
 }
