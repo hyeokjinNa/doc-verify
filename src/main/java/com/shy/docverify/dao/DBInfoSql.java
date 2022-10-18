@@ -6,11 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.shy.docverify.dto.TableDTO;
+import com.shy.docverify.dto.TableNameDTO;
 import com.shy.docverify.dto.UserDTO;
 import com.shy.docverify.util.ConvertUtil;
 
@@ -115,7 +117,6 @@ public class DBInfoSql {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet result = null;
-		
 		try {
 			
 			Class.forName(user.getDriver());
@@ -142,6 +143,63 @@ public class DBInfoSql {
 		}
 		
 		return list;
+	}
+	
+	public List<TableNameDTO> selectTableNameList(TreeSet<String> asisTableName, UserDTO user){
+		
+		String sql = convert.convertSqlToString("sql/selectTables.sql");
+		List<String> setToList = new ArrayList<String>();
+		setToList.addAll(asisTableName);
+		
+			
+		List<TableNameDTO> tableNamelist = new ArrayList<TableNameDTO>();
+		TableNameDTO tableName = new TableNameDTO();
+		
+		Connection conn = null;
+		PreparedStatement pre = null;
+		ResultSet result = null;
+			
+		try {
+			
+			Class.forName(user.getDriver());
+			
+			conn = DriverManager.getConnection(user.getUrl(), user.getUserName(), user.getPassword());
+			
+			for(int i=0; i<setToList.size(); i++) {
+				
+				pre = conn.prepareStatement(sql);
+				pre.setString(1, setToList.get(i));
+				pre.setString(2, "%"+setToList.get(i));
+				result = pre.executeQuery();
+				
+				
+				while(result.next()) {
+					tableName.setDocTableName(result.getString(1));
+					tableName.setDocTableName(result.getString(2));
+				}//while end
+				
+				tableNamelist.add(tableName);
+				
+			}//for end
+			
+			
+			
+			
+		} catch (Exception e) {
+			System.out.println("Connection Error");
+		} finally {
+			try {
+				if(result != null) result.close();
+				if(pre != null) pre.close();
+				if(conn != null) conn.close();
+			} catch(Exception e) {
+				System.out.println("close Error");
+			}//try~catch end
+			
+		}//try~catch~finally end
+		
+		
+		return tableNamelist;
 	}
 	
 	

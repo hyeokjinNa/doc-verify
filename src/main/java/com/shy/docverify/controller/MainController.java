@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.shy.docverify.dao.DBInfoSql;
+import com.shy.docverify.dto.ParameterDTO;
 import com.shy.docverify.dto.TableDTO;
 import com.shy.docverify.dto.TableDTO.TableBuilder;
 import com.shy.docverify.dto.UserDTO;
@@ -43,14 +44,14 @@ public class MainController {
 	}
 	
 	@PostMapping("/excelRegister")
-	public String uploadExcel(List<MultipartFile> mfiles) {
+	public String uploadExcel(List<MultipartFile> mfiles, UserDTO user) {
 		List<File> files = new ArrayList<File>();
 		
 		for(MultipartFile mfile:mfiles) {
 			File file = converFile.multipartToFile(mfile);
 			files.add(file);
 		}
-		excelUtil.excelFileRead(files);
+		List<ParameterDTO> parameterDtoList = excelUtil.excelFileRead(files, user);
 		
 		return null;
 	}
@@ -64,7 +65,7 @@ public class MainController {
 			ra.addFlashAttribute("msg","DB 세팅 정보가 맞지 않습니다");
 		}
 		
-		return "index";
+		return "redirect:/";
 	}
 	
 	

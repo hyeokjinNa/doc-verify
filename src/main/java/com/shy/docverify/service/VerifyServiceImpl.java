@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.shy.docverify.dao.DBInfoSql;
 import com.shy.docverify.dto.ParameterDTO;
 import com.shy.docverify.dto.TableDTO;
-import com.shy.docverify.dao.DBInfoSql;
+import com.shy.docverify.dto.TableNameDTO;
+import com.shy.docverify.dto.UserDTO;
 
 @Service
 public class VerifyServiceImpl implements VerifyService {
@@ -23,6 +26,11 @@ public class VerifyServiceImpl implements VerifyService {
 	@Override
 	public List<TableDTO> getDBTable(String schema, String table) {
 		return dbInfoSql.selectTableInfo(schema, table);
+	}
+	
+	@Override
+	public List<TableNameDTO> getTableNmae(TreeSet<String> asisTableName, UserDTO user) {
+		return dbInfoSql.selectTableNameList(asisTableName, user);
 	}
 	
 	@Override
@@ -163,5 +171,7 @@ public class VerifyServiceImpl implements VerifyService {
 
 		return list;
 	}
+	
+	
 
 }
