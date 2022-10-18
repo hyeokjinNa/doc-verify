@@ -24,8 +24,8 @@ public class VerifyServiceImpl implements VerifyService {
 	
 	
 	@Override
-	public List<TableDTO> getDBTable(String schema, String table) {
-		return dbInfoSql.selectTableInfo(schema, table);
+	public List<TableDTO> getDBTable(String schema, String table, UserDTO user) {
+		return dbInfoSql.selectTableInfo(schema, table, user);
 	}
 	
 	@Override
@@ -172,6 +172,39 @@ public class VerifyServiceImpl implements VerifyService {
 		return list;
 	}
 	
-	
+	@Override
+	public List<Map<String, Object>> excelVerify(List<ParameterDTO> data, UserDTO user) {
+
+		List<Map<String, Object>> result = new ArrayList<>();
+		
+		
+		for(ParameterDTO parameterDto : data) {
+			
+			Map<String,String> tableNameMap = new HashMap<>();
+			List<TableDTO> tableDtoList = parameterDto.getTableDTO();
+			
+			for(TableDTO tableDto : tableDtoList) {
+				if(!tableNameMap.containsKey(tableDto.getTableName())) {
+					tableNameMap.put(tableDto.getTableName(), tableDto.getSchema());
+				}
+			}
+			
+			List<TableDTO> dbTableDtoList = new ArrayList<>();
+			
+			for(String tableName : tableNameMap.keySet()) {
+				dbTableDtoList.addAll(getDBTable(tableNameMap.get(tableName), tableName, user));
+			}
+			
+			ParameterDTO dbParameterDto = new ParameterDTO();
+			dbParameterDto.setName("DB");
+			dbParameterDto.setTableDTO(dbTableDtoList);
+			
+			result.add(verifyTables(parameterDto, dbParameterDto));
+			
+		}
+		
+		return result;
+		
+	}
 
 }

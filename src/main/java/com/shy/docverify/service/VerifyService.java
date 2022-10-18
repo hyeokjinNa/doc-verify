@@ -11,7 +11,7 @@ import com.shy.docverify.dto.UserDTO;
 
 public interface VerifyService {
 
-	public List<TableDTO> getDBTable(String schema, String table); 
+	public List<TableDTO> getDBTable(String schema, String table, UserDTO user); 
 	
 	public Map<String, Object> verifyTables(ParameterDTO firstTable, ParameterDTO secondTable);
 	
@@ -19,4 +19,5 @@ public interface VerifyService {
 	
 	public List<TableNameDTO> getTableNmae(TreeSet<String> asisTableName, UserDTO user);
 	
+	public List<Map<String, Object>> excelVerify(List<ParameterDTO> data, UserDTO user);
 }

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -23,6 +24,7 @@ import com.shy.docverify.dto.ParameterDTO;
 import com.shy.docverify.dto.TableDTO;
 import com.shy.docverify.dto.TableDTO.TableBuilder;
 import com.shy.docverify.dto.UserDTO;
+import com.shy.docverify.service.VerifyServiceImpl;
 import com.shy.docverify.util.ConvertUtil;
 import com.shy.docverify.util.ExcelUtil;
 
@@ -37,6 +39,9 @@ public class MainController {
 	
 	@Autowired
 	private DBInfoSql dbInfo;
+	
+	@Autowired
+	private VerifyServiceImpl verifyService;
 
 	@GetMapping("/")
 	public String main() {
@@ -52,6 +57,8 @@ public class MainController {
 			files.add(file);
 		}
 		List<ParameterDTO> parameterDtoList = excelUtil.excelFileRead(files, user);
+		
+		List<Map<String, Object>> data = verifyService.excelVerify(parameterDtoList, user);
 		
 		return null;
 	}
