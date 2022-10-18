@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
 <div class="header">
 	<div class="headerTitleBox">
 		<div class="headerTitleText">
@@ -30,3 +31,11 @@
 		</div>
 	</div>
 </div>
+<c:if test="${msg!=null}">
+	<div id="msgBox">${msg}</div>
+	<script>
+		setTimeout(function() {
+			$("#msgBox").fadeOut();
+		}, 500);
+	</script>
+</c:if>

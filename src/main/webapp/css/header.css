@@ -106,3 +106,17 @@
 	.logoutBtn:hover {
 		text-decoration: underline;
 	}
+	
+	#msgBox {
+		position: fixed;
+		width: 100%;
+		height: 130px;
+		left: 0;
+		top: 0;
+		background-color: rgba(255, 255, 255, .90);
+		color: #424242;
+		font-size: 40px;
+		line-height: 100px;
+		text-align: center;
+		font-weight: 700;
+	}

@@ -12,6 +12,7 @@
 
 </head>
 <body>
+
 <c:import url="/WEB-INF/view/template/header.jsp"/>
     <div id="content">
         <div id="excelUploadWrap">
@@ -22,6 +23,7 @@
                 <button id="excelDownBtn" class="btn btn-primary excelDownLoadWrapBtn">정의서 양식 다운</button>
             </div>
             <form action="/excelRegister" method="post" enctype="multipart/form-data">
+            	<input id="loginMember" type="hidden" name="user" value="${loginMember}">
 	            <div id="excelUploadBox">
 	                <h2>정의서 등록</h2><br/>
 	                <h3>최소 1개에서 최대 5개의 정의서를 등록해주세요</h3>
@@ -80,9 +82,11 @@
     const $dbLogin = $(".dbSettingFooter .register");
     const $excelUploadCancel = $("#btnWrap .cancel");
     const $dbSettingCancel = $(".dbSettingFooter .cancel");
+    const $excelUpload = $("#btnWrap .register");
+    
     let files = [];
     let fileCnt = 0;
-    
+
 
     //엑셀 파일 업로드
     $('#excelFile').on("change",function() {
@@ -150,6 +154,14 @@
         e.stopPropagation();
         $(".dbSettingWrap").removeClass("on");
         $("html").removeClass("popup");
+    });
+
+    $excelUpload.on("click",function(){
+        if($("#loginMember").val()==null){
+			alert("DB 로그인을 해주세요");
+			return false;
+        }
+
     });
 
    
