@@ -36,6 +36,6 @@
 	<script>
 		setTimeout(function() {
 			$("#msgBox").fadeOut();
-		}, 500);
+		}, 1000);
 	</script>
 </c:if>

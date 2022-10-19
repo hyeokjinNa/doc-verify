@@ -160,7 +160,7 @@ public class DBInfoSql {
 				.password("gmdmf")
 				.build();
 		
-		String sql = convert.convertSqlToString("sql/selectTables.sql");
+		String sql = convert.convertSqlToString("sql/selectTableNames.sql");
 		List<String> setToList = new ArrayList<String>();
 		setToList.addAll(asisTableName);
 		
@@ -188,7 +188,7 @@ public class DBInfoSql {
 				
 				while(result.next()) {
 					tableName.setDocTableName(result.getString(1));
-					tableName.setDocTableName(result.getString(2));
+					tableName.setDbTableName(result.getString(2));
 				}//while end
 				
 				tableNamelist.add(tableName);
@@ -199,6 +199,7 @@ public class DBInfoSql {
 			
 			
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("Connection Error");
 		} finally {
 			try {
