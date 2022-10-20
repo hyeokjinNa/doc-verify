@@ -20,7 +20,10 @@
                 <button id="dbSettingBtn" class="btn btn-primary">DB 설정</button>
             </div>
             <div id="excelDownloadWrap">
-                <button id="excelDownBtn" class="btn btn-primary excelDownLoadWrapBtn">정의서 양식 다운</button>
+            	<form action="/fileDownload" method="get">
+            		<input type="hidden" name="fileName" value="테이블컬럼매핑정의서 양식.xlsx">
+                	<button id="excelDownBtn" class="btn btn-primary excelDownLoadWrapBtn">정의서 양식 다운</button>
+            	</form>
             </div>
             <form action="/excelRegister" method="post" enctype="multipart/form-data">
             	<input id="loginMember" type="hidden" name="user" value="${loginMember}">

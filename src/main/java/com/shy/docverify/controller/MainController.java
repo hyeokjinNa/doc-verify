@@ -1,12 +1,15 @@
 package com.shy.docverify.controller;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,7 @@ import com.shy.docverify.dto.ParameterDTO;
 import com.shy.docverify.dto.TableDTO;
 import com.shy.docverify.dto.TableDTO.TableBuilder;
 import com.shy.docverify.dto.UserDTO;
+import com.shy.docverify.service.FileStorageService;
 import com.shy.docverify.service.VerifyServiceImpl;
 import com.shy.docverify.util.ConvertUtil;
 import com.shy.docverify.util.ExcelUtil;
@@ -41,6 +45,9 @@ public class MainController {
 	
 	@Autowired
 	private VerifyServiceImpl verifyService;
+	
+	 @Autowired
+	 FileStorageService storageService;
 
 	@GetMapping("/")
 	public String main() {
@@ -172,5 +179,27 @@ public class MainController {
 		model.addAttribute("dataJson", new Gson().toJson(data));
 		model.addAttribute("data", data);
 		return "resultPage";
+	}
+	
+	@GetMapping("/fileDownload")
+	public void docDownload(String fileName, HttpServletResponse response) {
+		byte[] downloadFile = storageService.selectOneFile(fileName);
+		
+		try {
+			
+			response.setContentType("application/octet-stream");
+			response.setContentLength(downloadFile.length);
+			
+			response.setHeader("Content-Disposition", "attachment; fileName=\""+URLEncoder.encode(fileName, "UTF-8")+"\";");
+			response.setHeader("Content-Transfer-Encoding", "binary");
+			
+			response.getOutputStream().write(downloadFile);
+			response.getOutputStream().flush();
+			response.getOutputStream().close();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }
