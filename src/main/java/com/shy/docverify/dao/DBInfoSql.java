@@ -166,7 +166,7 @@ public class DBInfoSql {
 		
 			
 		List<TableNameDTO> tableNamelist = new ArrayList<TableNameDTO>();
-		TableNameDTO tableName = new TableNameDTO();
+		
 		
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -179,7 +179,7 @@ public class DBInfoSql {
 			conn = DriverManager.getConnection(user.getUrl(), user.getUserName(), user.getPassword());
 			
 			for(int i=0; i<setToList.size(); i++) {
-				
+				TableNameDTO tableName = new TableNameDTO();
 				pre = conn.prepareStatement(sql);
 				pre.setString(1, setToList.get(i));
 				pre.setString(2, "%"+setToList.get(i));

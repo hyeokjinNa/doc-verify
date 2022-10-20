@@ -15,12 +15,13 @@ public class TableDTO {
 	private String scale;
 	private String notNull;
 	private String pk;
+	private String dbTableName;
 	private List<String> wrongColumns;
 	private boolean match;
 	private boolean check;
 
 	public TableDTO() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	private TableDTO(TableBuilder builder) {
@@ -151,14 +152,27 @@ public class TableDTO {
 	public void setCheck(boolean check) {
 		this.check = check;
 	}
+	
+	public String getDbTableName() {
+		return dbTableName;
+	}
+
+	public void setDbTableName(String dbtableName) {
+		this.dbTableName = dbtableName;
+	}
+
+	
 
 	@Override
 	public String toString() {
 		return "TableDTO [schema=" + schema + ", tableName=" + tableName + ", entityName=" + entityName
 				+ ", physicalName=" + physicalName + ", logicalName=" + logicalName + ", dataType=" + dataType
 				+ ", length=" + length + ", precision=" + precision + ", scale=" + scale + ", notNull=" + notNull
-				+ ", pk=" + pk + ", wrongColumns=" + wrongColumns + ", match=" + match + ", check=" + check + "]";
+				+ ", pk=" + pk + ", dbtableName=" + dbTableName + ", wrongColumns=" + wrongColumns + ", match=" + match
+				+ ", check=" + check + "]";
 	}
+
+
 
 	public static class TableBuilder {
 
