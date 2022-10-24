@@ -9,21 +9,18 @@
     <title>결과 페이지</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='/css/style.css'>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.semanticui.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/dataTables.semanticui.min.css">
     <link rel="stylesheet" href="/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.css"/>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/responsive.bootstrap5.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/buttons.dataTables.min.css"/>
     
     <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.12.1/pagination/simple_numbers_no_ellipses.js"></script>
+    <script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.js"></script>
-  	<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.js"></script>
-  	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
-  	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+  	<script type="text/javascript" src="/js/responsive.bootstrap5.js"></script>
+  	<script type="text/javascript" src="/js/dataTables.buttons.min.js"></script>
+  	<script type="text/javascript" src="/js/buttons.html5.min.js"></script>
   	
     <script>
         $.fn.DataTable.ext.pager.numbers_length = 5;
@@ -198,6 +195,48 @@
             // List<Map> - Map이 탭별로. 맵에는 excelName, db, doc
             // 일치하지 않는 테이블들 db 조회해서 select로 다 보여주기
         })
+        
+        $.fn.DataTable.ext.pager.simple_numbers_no_ellipses = function(page, pages) {
+		   var numbers = [];
+		   var buttons = $.fn.DataTable.ext.pager.numbers_length;
+		   var half = Math.floor( buttons / 2 );
+		
+		   var _range = function ( len, start ){
+		      var end;
+		   
+		      if ( typeof start === "undefined" ){ 
+		         start = 0;
+		         end = len;
+		
+		      } else {
+		         end = start;
+		         start = len;
+		      }
+		
+		      var out = []; 
+		      for ( var i = start ; i < end; i++ ){ out.push(i); }
+		   
+		      return out;
+		   };
+		    
+		
+		   if ( pages <= buttons ) {
+		      numbers = _range( 0, pages );
+		
+		   } else if ( page <= half ) {
+		      numbers = _range( 0, buttons);
+		
+		   } else if ( page >= pages - 1 - half ) {
+		      numbers = _range( pages - buttons, pages );
+		
+		   } else {
+		      numbers = _range( page - half, page + half + 1);
+		   }
+		
+		   numbers.DT_el = 'span';
+		
+		   return [ 'previous', numbers, 'next' ];
+		};
     </script>
 </head>
 <body>
