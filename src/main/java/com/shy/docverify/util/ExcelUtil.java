@@ -76,7 +76,7 @@ public class ExcelUtil {
 	
 							if (cell != null) {
 								
-								if (c == 9 || c > 16) {
+								if (c == 9 || c > 17) {
 									continue;
 								}
 								
@@ -117,22 +117,22 @@ public class ExcelUtil {
 										delimeter = null;
 									} else {
 										toBeTable.setLength(value);
-										toBeTable.setPrecision("");
-										toBeTable.setScale("");
+										toBeTable.setPrecision("0");
+										toBeTable.setScale("0");
 									}
 									break;
 								case TOBE_NOTNULL:
 									if (!value.equals("")) {
 										toBeTable.setNotNull("Y");
 									} else {
-										toBeTable.setNotNull("");
+										toBeTable.setNotNull("N");
 									}
 									break;
 								case TOBE_PK:
 									if (!value.equals("")) {
 										toBeTable.setPk(value);
 									} else {
-										toBeTable.setPk("");
+										toBeTable.setPk("N");
 									}
 									break;
 								case ASIS_TABLENAME:
@@ -161,22 +161,22 @@ public class ExcelUtil {
 										delimeter = null;
 									} else {
 										asIsTable.setLength(value);
-										asIsTable.setPrecision("");
-										asIsTable.setScale("");
+										asIsTable.setPrecision("0");
+										asIsTable.setScale("0");
 									}
 									break;
 								case ASIS_NOTNULL:
 									if (!value.equals("")) {
 										asIsTable.setNotNull("Y");
 									} else {
-										asIsTable.setNotNull("");
+										asIsTable.setNotNull("N");
 									}
 									break;
 								case ASIS_PK:
 									if (!value.equals("")) {
 										asIsTable.setPk(value);
 									} else {
-										asIsTable.setPk("");
+										asIsTable.setPk("N");
 									}
 									break;
 	
