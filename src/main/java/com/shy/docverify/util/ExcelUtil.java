@@ -111,27 +111,28 @@ public class ExcelUtil {
 								case TOBE_LENGTH:
 									if (value.contains(",")) {
 										delimeter = value.split(",");
-										toBeTable.setPrecision(delimeter[0]);
-										toBeTable.setScale(delimeter[1]);
+										toBeTable.setPrecision(delimeter[0].trim());
+										toBeTable.setScale(delimeter[1].trim());
 										toBeTable.setLength("22");
 										delimeter = null;
 									} else {
-	
 										toBeTable.setLength(value);
+										toBeTable.setPrecision("");
+										toBeTable.setScale("");
 									}
 									break;
 								case TOBE_NOTNULL:
 									if (!value.equals("")) {
 										toBeTable.setNotNull("Y");
 									} else {
-										toBeTable.setNotNull("N");
+										toBeTable.setNotNull("");
 									}
 									break;
 								case TOBE_PK:
 									if (!value.equals("")) {
 										toBeTable.setPk(value);
 									} else {
-										toBeTable.setPk("N");
+										toBeTable.setPk("");
 									}
 									break;
 								case ASIS_TABLENAME:
@@ -154,26 +155,28 @@ public class ExcelUtil {
 								case ASIS_LENGTH:
 									if (value.contains(",")) {
 										delimeter = value.split(",");
-										asIsTable.setPrecision(delimeter[0]);
-										asIsTable.setScale(delimeter[1]);
+										asIsTable.setPrecision(delimeter[0].trim());
+										asIsTable.setScale(delimeter[1].trim());
 										asIsTable.setLength("22");
 										delimeter = null;
 									} else {
 										asIsTable.setLength(value);
+										asIsTable.setPrecision("");
+										asIsTable.setScale("");
 									}
 									break;
 								case ASIS_NOTNULL:
 									if (!value.equals("")) {
 										asIsTable.setNotNull("Y");
 									} else {
-										asIsTable.setNotNull("N");
+										asIsTable.setNotNull("");
 									}
 									break;
 								case ASIS_PK:
 									if (!value.equals("")) {
 										asIsTable.setPk(value);
 									} else {
-										asIsTable.setPk("N");
+										asIsTable.setPk("");
 									}
 									break;
 	
