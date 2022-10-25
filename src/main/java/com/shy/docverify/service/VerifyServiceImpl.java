@@ -24,8 +24,8 @@ public class VerifyServiceImpl implements VerifyService {
 	
 	
 	@Override
-	public List<TableDTO> getDBTable(String schema, String table, UserDTO user) {
-		return dbInfoSql.selectTableInfo(schema, table, user);
+	public List<TableDTO> getDBTable(String schema, String table, String column, UserDTO user) {
+		return dbInfoSql.selectTableInfo(schema, table, column, user);
 	}
 	
 	@Override
@@ -37,7 +37,7 @@ public class VerifyServiceImpl implements VerifyService {
 	public Map<String, Object> verifyTables(ParameterDTO firstParam, ParameterDTO secondParam) {
 
 		String[] tableKeys = {"TableName", "PhysicalName", "EntityName", "LogicalName", "DataType", "Length",
-				"Precision", "Scale", "NotNull", "Pk" };
+				"Precision", "Scale", "NotNull", "Pk"};
 
 		List<TableDTO> firstTableList = firstParam.getTableDTO();
 		List<TableDTO> secondTableList = secondParam.getTableDTO();
@@ -48,10 +48,13 @@ public class VerifyServiceImpl implements VerifyService {
 
 			List<String> firstRow = setRowList(firstTable);
 			
+			if(StringUtils.equals(firstRow.get(11), "GMDMI")) 
+				firstRow.set(0, firstRow.get(10));
+			
 			for (TableDTO secondTable : secondTableList) {
 
 				List<String> secondRow = setRowList(secondTable);
-
+				
 				if (StringUtils.equals(firstRow.get(0), secondRow.get(0))
 						&& StringUtils.equals(firstRow.get(1), secondRow.get(1))) {
 					
@@ -98,7 +101,7 @@ public class VerifyServiceImpl implements VerifyService {
 	public Map<String, Object> verifySelectTable (ParameterDTO firstParam, ParameterDTO secondParam) {
 		
 		String[] tableKeys = {"TableName", "PhysicalName", "EntityName", "LogicalName", "DataType", "Length",
-				"Precision", "Scale", "NotNull", "Pk" };
+				"Precision", "Scale", "NotNull", "Pk"};
 		Map<String, Object> result = new HashMap();
 		
 		List<TableDTO> firstTableList = firstParam.getTableDTO();
@@ -107,6 +110,9 @@ public class VerifyServiceImpl implements VerifyService {
 		for (TableDTO firstTable : firstTableList) {
 
 			List<String> firstRow = setRowList(firstTable);
+
+			if(StringUtils.equals(firstRow.get(11), "GMDMI")) 
+				firstRow.set(0, firstRow.get(10));
 			
 			for(TableDTO secondTable : secondTableList) {
 				
@@ -168,7 +174,9 @@ public class VerifyServiceImpl implements VerifyService {
 		list.add(dto.getScale());
 		list.add(dto.getNotNull());
 		list.add(dto.getPk());
-
+		list.add(dto.getDbTableName());
+		list.add(dto.getSchema());
+		
 		return list;
 	}
 	
@@ -185,14 +193,18 @@ public class VerifyServiceImpl implements VerifyService {
 			
 			for(TableDTO tableDto : tableDtoList) {
 				if(!tableNameMap.containsKey(tableDto.getTableName())) {
-					tableNameMap.put(tableDto.getTableName(), tableDto.getSchema());
+					if(StringUtils.equals(tableDto.getSchema(),"GMDMI")) {
+						tableNameMap.put(tableDto.getDbTableName() + ":" + tableDto.getPhysicalName(), tableDto.getSchema());
+					} else {
+						tableNameMap.put(tableDto.getTableName() + ":" + tableDto.getPhysicalName(), tableDto.getSchema());
+					}
 				}
 			}
 			
 			List<TableDTO> dbTableDtoList = new ArrayList<>();
 			
 			for(String tableName : tableNameMap.keySet()) {
-				dbTableDtoList.addAll(getDBTable(tableNameMap.get(tableName), tableName, user));
+				dbTableDtoList.addAll(getDBTable(tableNameMap.get(tableName), tableName.split(":")[0], tableName.split(":")[1], user));
 			}
 			
 			ParameterDTO dbParameterDto = new ParameterDTO();

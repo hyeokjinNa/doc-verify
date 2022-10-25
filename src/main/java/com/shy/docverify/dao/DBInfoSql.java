@@ -47,7 +47,7 @@ public class DBInfoSql {
 		return check;
 	}
 	
-	public List<TableDTO> selectTableInfo(String owner, String table, UserDTO user) {
+	public List<TableDTO> selectTableInfo(String owner, String table, String column, UserDTO user) {
 		
 		user = new UserDTO.UserBuilder()
 				.url("jdbc:tibero:thin:@10.47.39.125:8629:DB_D_GMD")
@@ -72,6 +72,7 @@ public class DBInfoSql {
 			pre = conn.prepareStatement(sql);
 			pre.setString(1, owner);
 			pre.setString(2, table);
+			pre.setString(3, column);
 			result = pre.executeQuery();
 			
 			while(result.next()) {

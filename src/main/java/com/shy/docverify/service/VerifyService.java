@@ -11,7 +11,7 @@ import com.shy.docverify.dto.UserDTO;
 
 public interface VerifyService {
 
-	public List<TableDTO> getDBTable(String schema, String table, UserDTO user); 
+	public List<TableDTO> getDBTable(String schema, String table, String column, UserDTO user); 
 	
 	public Map<String, Object> verifyTables(ParameterDTO firstTable, ParameterDTO secondTable);
 	
