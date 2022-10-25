@@ -160,4 +160,20 @@ html.popup{
     #content button{
     	background-color: rgb(26, 37, 69);
     }
-    
+    #loader {
+    position: fixed;
+    width:100%;
+    height:100%;
+    left:0;
+    top:0;
+    background-image: url(../img/loader.gif);
+    background-color:#fff;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* 로딩이미지는 우선 숨김 */
+    display: none;
+    opacity:.8;
+	}
+	#loader.on{
+		display: block;
+	}	

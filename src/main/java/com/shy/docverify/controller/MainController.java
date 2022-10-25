@@ -55,7 +55,7 @@ public class MainController {
 	}
 	
 	@PostMapping("/excelRegister")
-	public String uploadExcel(List<MultipartFile> mfiles, UserDTO user) {
+	public String uploadExcel(List<MultipartFile> mfiles, UserDTO user, Model model) {
 		List<File> files = new ArrayList<File>();
 		
 		for(MultipartFile mfile:mfiles) {
@@ -66,7 +66,10 @@ public class MainController {
 		
 		List<Map<String, Object>> data = verifyService.excelVerify(parameterDtoList, user);
 		
-		return null;
+		model.addAttribute("dataJson", new Gson().toJson(data));
+		model.addAttribute("data", data);
+		
+		return "redirect:/result";
 	}
 	
 	@PostMapping("/dbLogin")

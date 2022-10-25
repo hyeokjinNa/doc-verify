@@ -76,6 +76,8 @@
         </form>
     </div>
 </div>
+<!-- 로딩이미지 -->
+<div id="loader"></div>
 <c:import url="/WEB-INF/view/template/footer.jsp"/> 
 
 
@@ -86,6 +88,7 @@
     const $excelUploadCancel = $("#btnWrap .cancel");
     const $dbSettingCancel = $(".dbSettingFooter .cancel");
     const $excelUpload = $("#btnWrap .register");
+    const $loader = $("#loader");
     
     let files = [];
     let fileCnt = 0;
@@ -163,6 +166,8 @@
         if($("#loginMember").val()==null){
 			alert("DB 로그인을 해주세요");
 			return false;
+        }else{
+        	$loader.fadeIn();
         }
 
     });
