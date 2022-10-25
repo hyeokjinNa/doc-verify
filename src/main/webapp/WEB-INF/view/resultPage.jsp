@@ -32,13 +32,13 @@
         $(function(){
             let checked;
             let data = eval('${dataJson}');
-            let table;
             
             $('#resultBox0').show(); // class=active
+            $('a:eq(0)').addClass('active');
             
             for(var i=0; i<data.length; i++) {
             
-            	table = $("#resultTable"+i).DataTable({
+            	$("#resultTable"+i).DataTable({
 
 	                data : data[i].doc, // doc 동적으로 바꿔보기
 	                columns : [
@@ -64,7 +64,6 @@
 	                //order : [[0, "asc"], [7, "desc"], [2, "asc"]], // 초기 정렬 [[열 번호, 정렬 순서]]
 	                // serverSide : true,
 	                processing : true,
-	                // responsive : true,
 	                columnDefs : [ // 각 컬럼들에 대한 커스터마이징
 						{
 				            defaultContent : "", // null값이면 undefined -> 빈 값으로 대체
@@ -118,7 +117,7 @@
 	                        if(!data.check) { // 아예 없는 경우
 	                            $(row).addClass('red');
 	
-	                        } else { // 불일치한 컬럼 표
+	                        } else { // 불일치한 컬럼 표시
 	                        	
 	                            //const columns = table.settings().init().columns;
 	                            
@@ -165,7 +164,7 @@
 	                		filename : '정의서 비교 결과 엑셀',
 	                		title : '정의서 비교 결과',
 	                		extend : 'excel',
-	                		exportOptions: {
+	                		exportOptions: { // 자리수 콤마 넣기
 	                			modifier: {
 	                				page: 'current'
 	                			}
@@ -175,23 +174,27 @@
 	            });
             }
 
-            $("input[name=matchRadio]").change(function(){
+            $("input[name=matchRadio]").change(function(){ // 새로고침 시 안 먹음
                 checked = $(this).val();
+                index = $("a").index($(".active"));
                 
                 if(checked == 'match') {
-                    table.columns(9).search(true).draw();
+                    $("#resultTable"+index).DataTable().columns(9).search('O').draw();
                 } else if(checked == 'notMatch') {
-                    table.columns(9).search(false).draw();
-                } else {
-                    table.columns(9).search('').draw();
+                    $("#resultTable"+index).DataTable().columns(9).search('X').draw();
+                } else if(checked == 'all') {
+                    $("#resultTable"+index).DataTable().columns(9).search('').draw();
                 }
             });
 
-            table.on('click', 'tr', function(){
-                var data = table.row(this).data();
-
-                if(!data.match) {
-                    alert(data.tableName + ' ' + data.entityName);
+            $(".table").on('click', 'tr', function(){
+            	index = $("a").index($(".active"));
+                var data = $("#resultTable"+index).DataTable().row(this).data();
+                
+                if(!data.check) {
+                	// db에 해당 테이블이 존재하지 않습니다
+                } else if(!data.match) {
+                    $("#modalWrap").modal('show');
                     // 불일치한 정보들 보여주기
                 }
             });
@@ -199,9 +202,13 @@
         })
         
         
-        function tabChange(event, index) {
+        function tabChange(event, index) { // css 바꿔주기
 	    	$('.tab-pane').hide();
+	    	$('a').removeClass('active');
+	    	$('a').eq(index).addClass('active');
 	    	$("#resultBox"+index).show();
+	    	$("input[name=matchRadio]:radio[value='all']").prop('checked', true);
+	    	$("#resultTable"+index).DataTable().columns(9).search('').draw();
 	    }
         
         
@@ -297,6 +304,23 @@
 			        </table>
 	    		</div>
 	    	</c:forEach>
+    	</div>
+    </div>
+    
+    <div class="modal" id="modalWrap" role="dialog">
+    	<div class="modal-dialog">
+    		<div class="modal-content">
+    			<div class="modal-header">
+    				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+    				<h3 class="modal-title">정의서 불일치 결과</h3>
+    			</div>
+    			<div class="modal-body">
+    				
+    			</div>
+    			<div class="modal-footer">
+    				
+    			</div>
+    		</div>
     	</div>
     </div>
 </body>
