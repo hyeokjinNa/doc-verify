@@ -3,8 +3,6 @@ package com.shy.docverify.controller;
 import java.io.File;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,8 +22,6 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import com.google.gson.Gson;
 import com.shy.docverify.dao.DBInfoSql;
 import com.shy.docverify.dto.ParameterDTO;
-import com.shy.docverify.dto.TableDTO;
-import com.shy.docverify.dto.TableDTO.TableBuilder;
 import com.shy.docverify.dto.UserDTO;
 import com.shy.docverify.service.FileStorageService;
 import com.shy.docverify.service.VerifyServiceImpl;
