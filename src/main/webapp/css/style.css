@@ -80,3 +80,15 @@ table {
 #tableSelect {
 	margin-top: 10px;
 }
+
+.footer {
+	text-align: center;
+}
+
+.footer > button {
+	background: rgb(26, 37, 69);
+}
+
+.footer a {
+	color: white;
+}

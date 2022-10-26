@@ -336,6 +336,10 @@
     	</div>
     </div>
     
+    <div class="footer">
+    	<button type="button" class="btn btn-primary"><a href="/">뒤로</a></button>
+    </div>
+    
     <div class="modal" id="modalWrap" tabindex="-1" role="dialog" aria-labelledby="modalTitle">
     	<div class="modal-dialog" role="document">
     		<div class="modal-content">
