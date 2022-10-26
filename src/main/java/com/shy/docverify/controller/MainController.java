@@ -74,7 +74,7 @@ public class MainController {
 	@PostMapping("/dbLogin")
 	public String dbLogin(UserDTO user, HttpSession session, RedirectAttributes ra) {
 		Boolean check = dbInfo.connectionTest(user);
-		if(check == true) {
+		if(check) {
 			session.setAttribute("loginMember", user);
 		}else {
 			ra.addFlashAttribute("msg","DB 세팅 정보가 맞지 않습니다");
