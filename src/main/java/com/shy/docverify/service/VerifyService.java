@@ -17,7 +17,7 @@ public interface VerifyService {
 	
 	public Map<String, Object> verifySelectTable (ParameterDTO firstParam, ParameterDTO secondParam);
 	
-	public List<TableNameDTO> getTableNmae(TreeSet<String> asisTableName, UserDTO user);
+	public List<TableNameDTO> getTableName(TreeSet<String> asisTableName, UserDTO user);
 	
 	public List<Map<String, Object>> excelVerify(List<ParameterDTO> data, UserDTO user);
 }

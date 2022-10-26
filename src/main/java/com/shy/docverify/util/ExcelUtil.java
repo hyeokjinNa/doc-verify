@@ -214,7 +214,7 @@ public class ExcelUtil {
 
 	public List<TableDTO> setAsisTableName(List<TableDTO> asisTableList, TreeSet<String> asisTableName, UserDTO user) {
 
-		List<TableNameDTO> tableNameList = service.getTableNmae(asisTableName, user);
+		List<TableNameDTO> tableNameList = service.getTableName(asisTableName, user);
 
 		for (int i = 0; i < asisTableList.size(); i++) {
 			for (int j = 0; j < tableNameList.size(); j++) {

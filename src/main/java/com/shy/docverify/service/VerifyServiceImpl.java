@@ -29,7 +29,7 @@ public class VerifyServiceImpl implements VerifyService {
 	}
 	
 	@Override
-	public List<TableNameDTO> getTableNmae(TreeSet<String> asisTableName, UserDTO user) {
+	public List<TableNameDTO> getTableName(TreeSet<String> asisTableName, UserDTO user) {
 		return dbInfoSql.selectTableNameList(asisTableName, user);
 	}
 	
