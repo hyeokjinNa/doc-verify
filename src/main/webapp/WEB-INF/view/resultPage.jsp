@@ -6,16 +6,17 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=chrome'>
-    <title>결과 페이지</title>
+    <title>결과 확인</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='/css/style.css'>
+    <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="/css/jquery.dataTables.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8/semantic.min.css">
     <link rel="stylesheet" type="text/css" href="/css/dataTables.semanticui.min.css">
-    <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="/css/responsive.bootstrap5.css"/>
     <link rel="stylesheet" type="text/css" href="/css/buttons.dataTables.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <c:import url="/WEB-INF/view/template/link.jsp"/>
     
     <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
@@ -31,16 +32,16 @@
 
         $(function(){
             let checked;
-            let data = eval('${dataJson}');
+            let datas = eval('${dataJson}');
             
             $('#resultBox0').show(); // class=active
             $('a:eq(0)').addClass('active');
             
-            for(var i=0; i<data.length; i++) {
+            for(var i=0; i<datas.length; i++) {
             
             	$("#resultTable"+i).DataTable({
 
-	                data : data[i].doc, // doc 동적으로 바꿔보기
+	                data : datas[i].doc, // doc 동적으로 바꿔보기
 	                columns : [
 	                    {data : "tableName"},
 	                    {data : "entityName"},
@@ -57,6 +58,7 @@
 	                searching : true, // 검색 기능
 	                ordering : true, // 정렬 기능
 	                info : true, // 정보 표시 - 몇 건 있는지
+	                autoWidth : false,
 	                paging : true,
 	                pagingType : "simple_numbers_no_ellipses",
 	                pageLength : 20, // displayLength
@@ -119,15 +121,15 @@
 	
 	                        } else { // 불일치한 컬럼 표시
 	                        	
-	                            //const columns = table.settings().init().columns;
+	                        	const columns = $("#resultTable"+i).DataTable().settings().init().columns;
 	                            
-	                            /*for(let i=0; i< columns.length; i++) {
+	                            for(let i=0; i< columns.length; i++) {
 	                            	data.wrongColumns.forEach(wrong => {
 	                                    if(columns[i].data == wrong) {
 	                                        $('td', row).eq(i).css('color', '#db2828'); // 값 불일치 컬럼 빨간색
 	                                    }
 	                                })
-	                            }*/
+	                            }
 	                        }
 	                    }
 	                },
@@ -190,25 +192,51 @@
             $(".table").on('click', 'tr', function(){
             	index = $("a").index($(".active"));
                 var data = $("#resultTable"+index).DataTable().row(this).data();
+                var tableName = data.tableName;
                 
                 if(!data.check) {
-                	// db에 해당 테이블이 존재하지 않습니다
+                	$(".modal-body").text('※ 해당 테이블이 DB에 존재하지 않아 비교가 불가능합니다.');
+                	$("#modalWrap").modal('show');
                 } else if(!data.match) {
+                	var dbData = datas[index].db;
+                	var wrongCols = data.wrongColumns;
+                	var html = '<table id="modalTable" class="table table-bordered">' +
+                		'<thead class="thead-light"><tr><th>불일치 컬럼</th><th>DB</th><th>정의서</th></tr></thead>' +
+                		'<tbody>';
+                	
+                	for(var i=0; i<dbData.length; i++) {
+                		if(dbData[i].tableName == data.tableName && dbData[i].physicalName == data.physicalName) {
+                			for(var j=0; j<wrongCols.length; j++) {
+                				var key = wrongCols[j];
+                				
+                				html += '<tr>';
+                				html += '<td class="table-active">' + key + '</td>';
+                				html += '<td>' + dbData[i][key] + '</td>';
+                				html += '<td>' + data[key] + '</td>';
+                				html += '</tr>';
+                			}
+                		}
+                	}
+                	
+                	html += '</tbody></table>';
+                	
+                	$(".modal-body").html(html);
                     $("#modalWrap").modal('show');
-                    // 불일치한 정보들 보여주기
                 }
             });
             // 일치하지 않는 테이블들 db 조회해서 select로 다 보여주기
+            // 검색 가능하게
         })
         
         
-        function tabChange(event, index) { // css 바꿔주기
+        function tabChange(event, index) {
 	    	$('.tab-pane').hide();
 	    	$('a').removeClass('active');
 	    	$('a').eq(index).addClass('active');
 	    	$("#resultBox"+index).show();
 	    	$("input[name=matchRadio]:radio[value='all']").prop('checked', true);
 	    	$("#resultTable"+index).DataTable().columns(9).search('').draw();
+	    	$("#resultTable"+index).DataTable().columns.adjust().draw();
 	    }
         
         
@@ -256,9 +284,10 @@
 		
     </script>
 </head>
+<c:import url="/WEB-INF/view/template/header.jsp"/>
 <body>
     <div>
-        <h2 class="center">정의서 일치 확인</h2>
+        <h2 id="title" class="center">정의서 DB 일치 결과</h2>
     </div>
     <div class="center">
         <input type="radio" id="all" name="matchRadio" value="all" checked>
@@ -269,7 +298,7 @@
         <label for="notMatch">불일치</label>
     </div>
     <div class="center">
-        <select name="tableSelect" id="tableSelect">
+        <select name="tableSelect" id="tableSelect" class="form-select">
             <option value="all">전체선택</option>
             <option value="TB_BL01I_001">TB_BL01I_001</option>
         </select>
@@ -286,7 +315,7 @@
     	<div class="tab-content">
     		<c:forEach items="${data}" var="item" varStatus="status">
 	    		<div id="resultBox${status.index}" class="tab-pane">
-	    			<table id="resultTable${status.index}" class="table ui celled" style="width: 100%">
+	    			<table id="resultTable${status.index}" class="table ui celled">
 			            <thead>
 			                <tr>
 			                    <th>테이블명</th>
@@ -307,19 +336,16 @@
     	</div>
     </div>
     
-    <div class="modal" id="modalWrap" role="dialog">
-    	<div class="modal-dialog">
+    <div class="modal" id="modalWrap" tabindex="-1" role="dialog" aria-labelledby="modalTitle">
+    	<div class="modal-dialog" role="document">
     		<div class="modal-content">
     			<div class="modal-header">
-    				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-    				<h3 class="modal-title">정의서 불일치 결과</h3>
+    				<h4 class="modal-title" id="modalTitle">정의서 불일치 결과</h4>
+    				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    					<span aria-hidden="true">&times;</span>
+    				</button>
     			</div>
-    			<div class="modal-body">
-    				
-    			</div>
-    			<div class="modal-footer">
-    				
-    			</div>
+    			<div class="modal-body"></div>
     		</div>
     	</div>
     </div>

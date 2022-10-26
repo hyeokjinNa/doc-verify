@@ -56,3 +56,27 @@ table {
 .pointer {
 	cursor : pointer;
 }
+
+#modalTable {
+	text-align: center;
+}
+
+#modalTable th {
+	font-weight: bold;
+	text-align: center;
+}
+
+.active {
+	font-weight: bold;
+	background: lightgrey;
+}
+
+#title {
+	margin-top: 50px;
+	margin-bottom: 50px;
+	font-size: 40px;
+}
+
+#tableSelect {
+	margin-top: 10px;
+}
