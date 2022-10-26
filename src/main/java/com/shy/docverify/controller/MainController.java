@@ -56,13 +56,16 @@ public class MainController {
 	}
 	
 	@PostMapping("/excelRegister")
-	public String uploadExcel(List<MultipartFile> mfiles, UserDTO user, RedirectAttributes ra) {
+	public String uploadExcel(List<MultipartFile> mfiles, HttpSession session, RedirectAttributes ra) {
 		List<File> files = new ArrayList<File>();
 		
 		for(MultipartFile mfile:mfiles) {
 			File file = converFile.multipartToFile(mfile);
 			files.add(file);
 		}
+		
+		UserDTO user = (UserDTO) session.getAttribute("loginMember");
+		
 		List<ParameterDTO> parameterDtoList = excelUtil.excelFileRead(files, user);
 		
 		List<Map<String, Object>> data = verifyService.excelVerify(parameterDtoList, user);
