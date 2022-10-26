@@ -91,8 +91,9 @@ public class VerifyServiceImpl implements VerifyService {
 			
 		}
 		
-		result.put(firstParam.getName(), firstTableList);
-		result.put(secondParam.getName(), secondTableList);
+		result.put("doc", firstTableList);
+		result.put("db", secondTableList);
+		result.put("excelName", firstParam.getName());
 
 		return result;
 	}
@@ -208,7 +209,7 @@ public class VerifyServiceImpl implements VerifyService {
 			}
 			
 			ParameterDTO dbParameterDto = new ParameterDTO();
-			dbParameterDto.setName("DB");
+			dbParameterDto.setName("db");
 			dbParameterDto.setTableDTO(dbTableDtoList);
 			
 			result.add(verifyTables(parameterDto, dbParameterDto));
