@@ -34,14 +34,11 @@
             let checked;
             let datas = eval('${dataJson}');
             
-            $('#resultBox0').show(); // class=active
-            $('a:eq(0)').addClass('active');
-            
             for(var i=0; i<datas.length; i++) {
             
             	$("#resultTable"+i).DataTable({
 
-	                data : datas[i].doc, // doc 동적으로 바꿔보기
+	                data : datas[i].doc,
 	                columns : [
 	                    {data : "tableName"},
 	                    {data : "entityName"},
@@ -52,7 +49,8 @@
 	                    {data : "precision"},
 	                    {data : "pk"},
 	                    {data : "notNull"},
-	                    {data : "match"}
+	                    {data : "match"},
+	                    {data : "check"}
 	                ],
 	                lengthChange : true, // 표시 건수 기능 - 몇 건씩 보여줄지
 	                searching : true, // 검색 기능
@@ -107,31 +105,31 @@
 	                        render : function(data, type, row) {
 	                        	return data ? 'O' : 'X';
 	                        }
-	                    }
+	                    },
+	                    {targets : 10, visible : false}
 	                    // {responsivePriority : -3 , targets: 0}, // responsivePriority 숫자가 클수록 먼저 사라짐. 음수는 사라지지 않게
 	                    // {responsivePriority : -2 , targets: 1}
 					],
 	                createdRow : function(row, data, dataIndex, cells) {
 	                
-	                    if(!data.match) {
+	                	if(!data.check) {
+	                    	this.api().row($(row)).remove().draw();
+	                    }
+	                
+	                    if(!data.match && data.wrongColumns != null) {
 	                        $(row).addClass('pointer');
 	
-	                        if(!data.check) { // 아예 없는 경우
-	                            $(row).addClass('red');
-	
-	                        } else { // 불일치한 컬럼 표시
-	                        	
-	                        	const columns = $("#resultTable"+i).DataTable().settings().init().columns;
+	                        const columns = this.api().settings().init().columns;
 	                            
-	                            for(let i=0; i< columns.length; i++) {
-	                            	data.wrongColumns.forEach(wrong => {
-	                                    if(columns[i].data == wrong) {
-	                                        $('td', row).eq(i).css('color', '#db2828'); // 값 불일치 컬럼 빨간색
-	                                    }
-	                                })
-	                            }
-	                        }
+                            for(let i=0; i< columns.length; i++) {
+                            	data.wrongColumns.forEach(wrong => {
+                                    if(columns[i].data == wrong) {
+                                        $('td', row).eq(i).css('background', 'rgba(200, 0, 0, 0.5)'); // 값 불일치 컬럼 빨간색
+                                    }
+                                })
+                            }
 	                    }
+	                    
 	                },
 	                language:
 				    {
@@ -151,14 +149,6 @@
 	                    infoThousands : ","
 				    },
 	                stateSave : true, // 현재 상태를 보존
-	                initComplete : function(settings, json){
-	                    // json.data.forEach(element => {
-	                    //     if(element.match == 'X' && element.check == 'O') {
-	                    //         //console.log(element.wrongColumns);
-	                    //     }
-	                    // });
-	                    // 맨 처음에 몇개 불일치인지, 전체에서 몇개인지. 퍼센트로도?
-	                },
 	                dom : 'Bfrtip',
 	                buttons : [
 	                	{
@@ -167,14 +157,35 @@
 	                		title : '정의서 비교 결과',
 	                		extend : 'excel',
 	                		exportOptions: { // 자리수 콤마 넣기
-	                			modifier: {
-	                				page: 'current'
-	                			}
+	                			columns : ':visible'
+	                		}
+	                	},
+	                	{
+	                		text : '비교되지 않은 테이블',
+	                		action : function(e, table, node, config) { // $.fn.dataTable.ext.buttons
+	                			$.ajax({
+	                				url : '',
+	                				type : 'get',
+	                				success : function(data) {
+	                					
+	                				}
+	                			});
+	                			
+	                			var html = '<table id="checkModalTable" class="table table-bordered">' +
+			                		'<thead class="thead-light"><tr><th>불일치 컬럼</th><th>DB</th><th>정의서</th></tr></thead>' +
+			                		'<tbody>';
+			                	
+			                	
+			                	
+			                	html += '</tbody></table>';
+                	
+                				$("#checkModal .modal-body").html(html);
+	                			$("#checkModal").modal('show');
 	                		}
 	                	}
 	                ]
 	            });
-            }
+            } // datatable for문
 
             $("input[name=matchRadio]").change(function(){ // 새로고침 시 안 먹음
                 checked = $(this).val();
@@ -194,17 +205,14 @@
                 var data = $("#resultTable"+index).DataTable().row(this).data();
                 var tableName = data.tableName;
                 
-                if(!data.check) {
-                	$(".modal-body").text('※ 해당 테이블이 DB에 존재하지 않아 비교가 불가능합니다.');
-                	$("#modalWrap").modal('show');
-                } else if(!data.match) {
+                if(!data.match) {
                 	var dbData = datas[index].db;
                 	var wrongCols = data.wrongColumns;
                 	var html = '<table id="modalTable" class="table table-bordered">' +
                 		'<thead class="thead-light"><tr><th>불일치 컬럼</th><th>DB</th><th>정의서</th></tr></thead>' +
                 		'<tbody>';
                 	
-                	for(var i=0; i<dbData.length; i++) {
+                	for(var i=0; i<dbData.length; i++) { // wrongCols 테이블명처럼 나오게 바꾸기
                 		if(dbData[i].tableName == data.tableName && dbData[i].physicalName == data.physicalName) {
                 			for(var j=0; j<wrongCols.length; j++) {
                 				var key = wrongCols[j];
@@ -220,23 +228,35 @@
                 	
                 	html += '</tbody></table>';
                 	
-                	$(".modal-body").html(html);
+                	$("#modalWrap .modal-body").html(html);
                     $("#modalWrap").modal('show');
                 }
             });
             // 일치하지 않는 테이블들 db 조회해서 select로 다 보여주기
             // 검색 가능하게
-        })
-        
+            
+            $('a:eq(0)').click();
+        });
         
         function tabChange(event, index) {
+        	var table = $("#resultTable"+index).DataTable();
+        	
 	    	$('.tab-pane').hide();
 	    	$('a').removeClass('active');
 	    	$('a').eq(index).addClass('active');
 	    	$("#resultBox"+index).show();
 	    	$("input[name=matchRadio]:radio[value='all']").prop('checked', true);
-	    	$("#resultTable"+index).DataTable().columns(9).search('').draw();
-	    	$("#resultTable"+index).DataTable().columns.adjust().draw();
+	    	table.columns(9).search('').draw();
+	    	table.columns.adjust().draw();
+	    	
+	    	// 불일치 정보 바꿔주기
+	        var totalCount = table.data().count();
+            var notMatchCount = table.column(9).data().filter(function(value, index) {
+            	return !value;
+            }).count();
+            
+            $('#resultPercent span').eq(0).text(notMatchCount); // 개수
+            $('#resultPercent span').eq(1).text(notMatchCount/totalCount*100); // 비율
 	    }
         
         
@@ -303,6 +323,10 @@
             <option value="TB_BL01I_001">TB_BL01I_001</option>
         </select>
     </div>
+    <div id="resultPercent">
+    	<p>불일치 개수 : <span></span> 개</p>
+    	<p>불일치 비율 : <span></span> %</p>
+    </div>
     <div id="resultWrap">
     	<ul class="nav nav-tabs" role="tablist">
     		<c:forEach items="${data}" var="item" varStatus="status">
@@ -341,10 +365,24 @@
     </div>
     
     <div class="modal" id="modalWrap" tabindex="-1" role="dialog" aria-labelledby="modalTitle">
-    	<div class="modal-dialog" role="document">
+    	<div class="modal-dialog modal-dialog-centered" role="document">
     		<div class="modal-content">
     			<div class="modal-header">
     				<h4 class="modal-title" id="modalTitle">정의서 불일치 결과</h4>
+    				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    					<span aria-hidden="true">&times;</span>
+    				</button>
+    			</div>
+    			<div class="modal-body"></div>
+    		</div>
+    	</div>
+    </div>
+    
+    <div class="modal" id="checkModal" tabindex="-1" role="dialog" aria-labelledby="checkModalTitle">
+    	<div class="modal-dialog modal-dialog-centered" role="document">
+    		<div class="modal-content">
+    			<div class="modal-header">
+    				<h4 class="modal-title" id="checkModalTitle">비교되지 않은 테이블 리스트</h4>
     				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
     					<span aria-hidden="true">&times;</span>
     				</button>

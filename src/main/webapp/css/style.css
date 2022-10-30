@@ -92,3 +92,9 @@ table {
 .footer a {
 	color: white;
 }
+
+#resultPercent {
+	margin-left : 100px;
+	margin-bottom: 20px;
+}
+}
