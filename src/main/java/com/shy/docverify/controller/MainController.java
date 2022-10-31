@@ -85,6 +85,14 @@ public class MainController {
 		return "redirect:/";
 	}
 	
+	@GetMapping("/dbLogout")
+	public String dbLogout(HttpSession session) {
+		
+		session.removeAttribute("loginMember");
+		
+		return "redirect:/";
+	}
+	
 	
 	@GetMapping("/result")
 	public String result(HttpServletRequest request, Model model) {
