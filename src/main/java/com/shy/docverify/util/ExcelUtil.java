@@ -28,14 +28,13 @@ public class ExcelUtil {
 
 	public List<ParameterDTO> excelFileRead(List<File> files, UserDTO user) {
 		List<ParameterDTO> parameterDtoList = new ArrayList<ParameterDTO>();
-		ParameterDTO parameterDto = new ParameterDTO();
 
 		for (File file : files) {
+			ParameterDTO parameterDto = new ParameterDTO();
 			parameterDto.setName(file.getName());
 			parameterDto.setTableDTO(extractXlsxFile(file, user));
 			parameterDtoList.add(parameterDto);
 		}
-
 		return parameterDtoList;
 	}// excelFileRead end
 
