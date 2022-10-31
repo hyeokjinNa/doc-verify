@@ -56,8 +56,10 @@ public class MainController {
 		List<File> files = new ArrayList<File>();
 		
 		for(MultipartFile mfile:mfiles) {
-			File file = converFile.multipartToFile(mfile);
-			files.add(file);
+			if(!mfile.getOriginalFilename().isEmpty()) {
+				File file = converFile.multipartToFile(mfile);
+				files.add(file);
+			}
 		}
 		
 		UserDTO user = (UserDTO) session.getAttribute("loginMember");

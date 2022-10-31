@@ -54,11 +54,11 @@
 	        <div class="dbSettingContent">
 	                <div class="inputWrap">
 	                    <h2>url</h2>
-	                    <input name="url" class="input-group "/>
+	                    <input name="url" class="input-group" value="jdbc:tibero:thin:@(DESCRIPTION=(failover=on)(load_balance=on)(address_list=(address=(host=10.175.152.219)(port=28629))(address=(host=10.175.152.220)(port=28629)))(database_name=db_p_gmd))"/>
 	                </div>
 	                <div class="inputWrap">
 	                    <h2>driver</h2>
-	                    <input name="driver" class="input-group"/>
+	                    <input name="driver" class="input-group" value="com.tmax.tibero.jdbc.TbDriver"/>
 	                </div>
 	                <div class="inputWrap">
 	                    <h2>userName</h2>
@@ -163,7 +163,7 @@
     });
 
     $excelUpload.on("click",function(){
-        if($("#loginMember").val()==null){
+        if($("#loginMember").val()==""){
 			alert("DB 로그인을 해주세요");
 			return false;
         }else{
