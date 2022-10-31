@@ -124,14 +124,14 @@ public class ExcelUtil {
 									if (!value.equals("")) {
 										toBeTable.setNotNull("Y");
 									} else {
-										toBeTable.setNotNull("N");
+										toBeTable.setNotNull(null);
 									}
 									break;
 								case TOBE_PK:
 									if (!value.equals("")) {
 										toBeTable.setPk(value);
 									} else {
-										toBeTable.setPk("N");
+										toBeTable.setPk(null);
 									}
 									break;
 								case ASIS_TABLENAME:
@@ -168,14 +168,14 @@ public class ExcelUtil {
 									if (!value.equals("")) {
 										asIsTable.setNotNull("Y");
 									} else {
-										asIsTable.setNotNull("N");
+										asIsTable.setNotNull(null);
 									}
 									break;
 								case ASIS_PK:
 									if (!value.equals("")) {
 										asIsTable.setPk(value);
 									} else {
-										asIsTable.setPk("N");
+										asIsTable.setPk(null);
 									}
 									break;
 	
