@@ -36,8 +36,8 @@ public class VerifyServiceImpl implements VerifyService {
 	@Override
 	public Map<String, Object> verifyTables(ParameterDTO firstParam, ParameterDTO secondParam) {
 
-		String[] tableKeys = {"TableName", "PhysicalName", "EntityName", "LogicalName", "DataType", "Length",
-				"Precision", "Scale", "NotNull", "Pk"};
+		String[] tableKeys = {"tableName", "physicalName", "entityName", "logicalName", "dataType", "length",
+				"precision", "scale", "notNull", "pk"};
 
 		List<TableDTO> firstTableList = firstParam.getTableDTO();
 		List<TableDTO> secondTableList = secondParam.getTableDTO();
@@ -101,8 +101,8 @@ public class VerifyServiceImpl implements VerifyService {
 	@Override
 	public Map<String, Object> verifySelectTable (ParameterDTO firstParam, ParameterDTO secondParam) {
 		
-		String[] tableKeys = {"TableName", "PhysicalName", "EntityName", "LogicalName", "DataType", "Length",
-				"Precision", "Scale", "NotNull", "Pk"};
+		String[] tableKeys = {"tableName", "physicalName", "entityName", "logicalName", "dataType", "length",
+				"precision", "scale", "notNull", "pk"};
 		Map<String, Object> result = new HashMap();
 		
 		List<TableDTO> firstTableList = firstParam.getTableDTO();
