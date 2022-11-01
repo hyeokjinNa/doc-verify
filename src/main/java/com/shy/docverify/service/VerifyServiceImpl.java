@@ -48,19 +48,17 @@ public class VerifyServiceImpl implements VerifyService {
 
 			List<String> firstRow = setRowList(firstTable);
 			
-			if(StringUtils.equals(firstRow.get(11), "GMDMI")) 
-				firstRow.set(0, firstRow.get(10));
-			
 			for (TableDTO secondTable : secondTableList) {
 
 				List<String> secondRow = setRowList(secondTable);
 				
-				if (StringUtils.equals(firstRow.get(0), secondRow.get(0))
+				if (StringUtils.equals(firstRow.get(10), secondRow.get(10))
 						&& StringUtils.equals(firstRow.get(1), secondRow.get(1))) {
 					
 					firstTable.setCheck(true);
 					secondTable.setCheck(true);
-
+					secondTable.setTableName(firstTable.getTableName());
+					
 					boolean match = true;
 
 					for (int col = 2; col < tableKeys.length; col++) {
@@ -112,9 +110,6 @@ public class VerifyServiceImpl implements VerifyService {
 
 			List<String> firstRow = setRowList(firstTable);
 
-			if(StringUtils.equals(firstRow.get(11), "GMDMI")) 
-				firstRow.set(0, firstRow.get(10));
-			
 			for(TableDTO secondTable : secondTableList) {
 				
 				List<String> secondRow = setRowList(secondTable);
@@ -194,11 +189,7 @@ public class VerifyServiceImpl implements VerifyService {
 			
 			for(TableDTO tableDto : tableDtoList) {
 				if(!tableNameMap.containsKey(tableDto.getTableName())) {
-					if(StringUtils.equals(tableDto.getSchema(),"GMDMI")) {
-						tableNameMap.put(tableDto.getDbTableName() + ":" + tableDto.getPhysicalName(), tableDto.getSchema());
-					} else {
-						tableNameMap.put(tableDto.getTableName() + ":" + tableDto.getPhysicalName(), tableDto.getSchema());
-					}
+					tableNameMap.put(tableDto.getDbTableName() + ":" + tableDto.getPhysicalName(), tableDto.getSchema());
 				}
 			}
 			

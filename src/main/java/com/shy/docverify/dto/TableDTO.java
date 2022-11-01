@@ -36,6 +36,7 @@ public class TableDTO {
 		this.scale = builder.scale;
 		this.notNull = builder.notNull;
 		this.pk = builder.pk;
+		this.dbTableName = builder.dbTableName;
 		this.wrongColumns = builder.wrongColumns;
 		this.match = builder.match;
 		this.check = builder.check;
@@ -187,6 +188,7 @@ public class TableDTO {
 		private String scale;
 		private String notNull;
 		private String pk;
+		private String dbTableName;
 		private List<String> wrongColumns;
 		private boolean match = false;
 		private boolean check = false;
@@ -243,6 +245,11 @@ public class TableDTO {
 
 		public TableBuilder pk(String pk) {
 			this.pk = pk;
+			return this;
+		}
+		
+		public TableBuilder dbTableName(String dbTableName) {
+			this.dbTableName = dbTableName;
 			return this;
 		}
 

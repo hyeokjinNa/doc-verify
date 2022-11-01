@@ -71,7 +71,7 @@ public class DBInfoSql {
 			while(result.next()) {
 				TableDTO dto = new TableDTO.TableBuilder()
 					.schema(result.getString(1))
-					.tableName(result.getString(2))
+					.dbTableName(result.getString(2))
 					.entityName(result.getString(3))
 					.physicalName(result.getString(4))
 					.logicalName(result.getString(5))
