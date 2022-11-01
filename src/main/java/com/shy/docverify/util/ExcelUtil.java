@@ -91,7 +91,8 @@ public class ExcelUtil {
 								
 								switch (ExtractType.values()[valueNum]) {
 								case TOBE_TABLENAME:
-									toBeTable.setTableName("C_" + value + "_VA");
+									toBeTable.setTableName(value);
+									toBeTable.setDbTableName("C_" + value + "_VA");
 									toBeSchema = "TOBE" + value.substring(0, 4);
 									toBeTable.setSchema(toBeSchema);
 									break;
