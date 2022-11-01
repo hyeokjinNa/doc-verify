@@ -105,7 +105,7 @@
         for(let i = 0; i<this.files.length; i++){
         
         const file = this.files[i];
-        files.push(file);  
+        files.push(file);
         if (/^application/.test(file.type)&&/.sheet$/.test(file.type)) {
            //multipart/form-data에 필요함
            
@@ -135,8 +135,10 @@
            
           })//.imgBox click() end
 
+       } else if(/^application/.test(file.type)&&/.ms-excel$/.test(file.type)){
+    	   alert("지원하지 않는 엑셀 버전입니다 ex).xlsx파일로 선택해주세요.");
        } else {
-           alert("엑셀 선택해주세요!");
+           alert("엑셀 선택해주세요.");
        }
         
        }//for end
