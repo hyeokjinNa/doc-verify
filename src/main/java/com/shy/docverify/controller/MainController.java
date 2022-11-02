@@ -24,7 +24,7 @@ import com.shy.docverify.dao.DBInfoSql;
 import com.shy.docverify.dto.ParameterDTO;
 import com.shy.docverify.dto.UserDTO;
 import com.shy.docverify.service.FileStorageService;
-import com.shy.docverify.service.VerifyServiceImpl;
+import com.shy.docverify.service.VerifyService;
 import com.shy.docverify.util.ConvertUtil;
 import com.shy.docverify.util.ExcelUtil;
 
@@ -41,7 +41,7 @@ public class MainController {
 	private DBInfoSql dbInfo;
 	
 	@Autowired
-	private VerifyServiceImpl verifyService;
+	private VerifyService verifyService;
 	
 	 @Autowired
 	 FileStorageService storageService;
@@ -127,6 +127,5 @@ public class MainController {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 }

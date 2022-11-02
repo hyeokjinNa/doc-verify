@@ -72,12 +72,6 @@
 				      	{orderable : true, targets :[0,2]},
 	                    {orderable : false, targets :[1,3,4,5,6,7,8,9]},
 	                    {
-	                    	targets : 0,
-	                    	render : function(data, type, row) {
-	                    		return row.schema + "." + data;
-	                    	}
-	                    },
-	                    {
 	                    	targets : 6,
 	                    	render : function(data, type, row) {
 	                    		return row.scale == null ? data : data + "," + row.scale;
@@ -163,33 +157,30 @@
 	                	{
 	                		text : '비교되지 않은 테이블',
 	                		action : function(e, table, node, config) { // $.fn.dataTable.ext.buttons
-	                			$.ajax({
-	                				url : '',
-	                				type : 'get',
-	                				success : function(data) {
-	                					
-	                				}
-	                			});
 	                			
-	                			var html = '<table id="checkModalTable" class="table table-bordered">' +
-			                		'<thead class="thead-light"><tr><th>불일치 컬럼</th><th>DB</th><th>정의서</th></tr></thead>' +
-			                		'<tbody>';
+	                			var index = $("a").index($(".active"));
+			                	var uncheckData = datas[index].doc;
+			                	var array = [];
 			                	
+			                	uncheckData.forEach(function(item, i) {
+			                		if(!item.check) {
+			                			array.push(item);
+			                		}
+			                	});
 			                	
-			                	
-			                	html += '</tbody></table>';
-                	
-                				$("#checkModal .modal-body").html(html);
+			                	$("#docTable").DataTable().destroy();
+	                			makeDocDataTable(array);
 	                			$("#checkModal").modal('show');
+	                			// 반은 정의서에 없고 디비에만 있는 애들 (테이블 선택해서)
 	                		}
 	                	}
 	                ]
 	            });
             } // datatable for문
 
-            $("input[name=matchRadio]").change(function(){ // 새로고침 시 안 먹음
-                checked = $(this).val();
-                index = $("a").index($(".active"));
+            $("input[name=matchRadio]").change(function() { // 새로고침 시 안 먹음
+                var checked = $(this).val();
+                var index = $("a").index($(".active"));
                 
                 if(checked == 'match') {
                     $("#resultTable"+index).DataTable().columns(9).search('O').draw();
@@ -200,15 +191,14 @@
                 }
             });
 
-            $(".table").on('click', 'tr', function(){
-            	index = $("a").index($(".active"));
+            $("#resultWrap .table").on('click', 'tr', function() {
+            	var index = $("a").index($(".active"));
                 var data = $("#resultTable"+index).DataTable().row(this).data();
                 var tableName = data.tableName;
-                
                 if(!data.match) {
                 	var dbData = datas[index].db;
                 	var wrongCols = data.wrongColumns;
-                	var html = '<table id="modalTable" class="table table-bordered">' +
+                	var html = '<table id="modalTable" class="table table-bordered ui">' +
                 		'<thead class="thead-light"><tr><th>불일치 컬럼</th><th>DB</th><th>정의서</th></tr></thead>' +
                 		'<tbody>';
                 	
@@ -216,11 +206,21 @@
                 		if(dbData[i].tableName == data.tableName && dbData[i].physicalName == data.physicalName) {
                 			for(var j=0; j<wrongCols.length; j++) {
                 				var key = wrongCols[j];
+                				var dbWrong = '';
+                				var docWrong = '';
+                				
+                				if(typeof dbData[i][key] != 'undefined') {
+                					dbWrong = dbData[i][key];
+                				}
+                				
+                				if(typeof data[key] != 'undefined') {
+                					docWrong = data[key];
+                				}
                 				
                 				html += '<tr>';
                 				html += '<td class="table-active">' + key + '</td>';
-                				html += '<td>' + dbData[i][key] + '</td>';
-                				html += '<td>' + data[key] + '</td>';
+                				html += '<td>' + dbWrong + '</td>';
+                				html += '<td>' + docWrong + '</td>';
                 				html += '</tr>';
                 			}
                 		}
@@ -232,10 +232,22 @@
                     $("#modalWrap").modal('show');
                 }
             });
-            // 일치하지 않는 테이블들 db 조회해서 select로 다 보여주기
-            // 검색 가능하게
             
             $('a:eq(0)').click();
+            
+            $("#docTable").on('click', 'tr', function() {
+            	var data = $("#docTable").DataTable().row(this).data();
+            	
+            	$.ajax({
+            		url : "/checkTableList",
+            		type : "post",
+            		data : {schema : data.schema},
+            		success : function(data) {
+            			makeTableListDataTable(data);
+            			$("#tableList").removeClass('hidden');
+            		}
+            	});
+            });
         });
         
         function tabChange(event, index) {
@@ -256,8 +268,135 @@
             }).count();
             
             $('#resultPercent span').eq(0).text(notMatchCount); // 개수
-            $('#resultPercent span').eq(1).text(notMatchCount/totalCount*100); // 비율
+            $('#resultPercent span').eq(1).text((notMatchCount/totalCount*100).toFixed(3)); // 비율
 	    }
+        
+        function makeDocDataTable(array) {
+        	
+        	var docTable = $("#docTable").DataTable({
+                data : array,
+                columns : [
+                    {data : "tableName"},
+                    {data : "entityName"},
+                    {data : "physicalName"},
+                    {data : "logicalName"},
+                    {data : "dataType"},
+                    {data : "length"},
+                    {data : "precision"}
+                ],
+                lengthChange : false,
+                searching : true,
+                ordering : false,
+                info : false,
+                autoWidth : false,
+                paging : false,
+                processing : true,
+                columnDefs : [ // 각 컬럼들에 대한 커스터마이징
+					{
+			            defaultContent : "", // null값이면 undefined -> 빈 값으로 대체
+			            targets : "_all"
+			      	},
+                    {
+                    	targets : 6,
+                    	render : function(data, type, row) {
+                    		return row.scale == null ? data : data + "," + row.scale;
+                    	}
+                    }
+				],
+				language:
+			    {
+                    search : "검색 : ",
+                    zeroRecords : "검색 결과가 없습니다",
+                    loadingRecords : "로딩중..."
+			    },
+			    responsive : true,
+			    initComplete : function (settings, json) {  
+			        $("#docTable").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+			    }
+        	});
+        	
+        	docTable.columns.adjust();
+        }
+        
+		function makeTableListDataTable(array) {
+        	
+        	var tableList = $("#tableList").DataTable({
+                data : array,
+                columns : [
+                    {data : "dbTableName"}
+                ],
+                lengthChange : false,
+                searching : true,
+                ordering : false,
+                info : false,
+                autoWidth : false,
+                paging : false,
+                scrollY: "70vh",
+                scrollCollapse: true,
+                processing : true,
+                columnDefs : [ // 각 컬럼들에 대한 커스터마이징
+					{
+			            defaultContent : "", // null값이면 undefined -> 빈 값으로 대체
+			            targets : "_all"
+			      	}
+				],
+				language:
+			    {
+                    search : "검색 : ",
+                    zeroRecords : "검색 결과가 없습니다",
+                    loadingRecords : "로딩중..."
+			    },
+			    responsive : true
+        	});
+        	
+        	tableList.columns.adjust();
+        }
+        
+		function makeDbDataTable(array) {
+        	
+        	var dbTable = $("#dbTable").DataTable({
+                data : array,
+                columns : [
+                    {data : "tableName"},
+                    {data : "entityName"},
+                    {data : "physicalName"},
+                    {data : "logicalName"},
+                    {data : "dataType"},
+                    {data : "length"},
+                    {data : "precision"}
+                ],
+                lengthChange : false,
+                searching : true,
+                ordering : false,
+                info : false,
+                autoWidth : false,
+                paging : false,
+                scrollY: "70vh",
+                scrollCollapse: true,
+                processing : true,
+                columnDefs : [ // 각 컬럼들에 대한 커스터마이징
+					{
+			            defaultContent : "", // null값이면 undefined -> 빈 값으로 대체
+			            targets : "_all"
+			      	},
+                    {
+                    	targets : 6,
+                    	render : function(data, type, row) {
+                    		return row.scale == null ? data : data + "," + row.scale;
+                    	}
+                    }
+				],
+				language:
+			    {
+                    search : "검색 : ",
+                    zeroRecords : "검색 결과가 없습니다",
+                    loadingRecords : "로딩중..."
+			    },
+			    responsive : true
+        	});
+        	
+        	dbTable.columns.adjust();
+        }
         
         
         $.fn.DataTable.ext.pager.simple_numbers_no_ellipses = function(page, pages) {
@@ -316,12 +455,6 @@
         <label for="match">일치</label>
         <input type="radio" id="notMatch" name="matchRadio" value="notMatch">
         <label for="notMatch">불일치</label>
-    </div>
-    <div class="center">
-        <select name="tableSelect" id="tableSelect" class="form-select">
-            <option value="all">전체선택</option>
-            <option value="TB_BL01I_001">TB_BL01I_001</option>
-        </select>
     </div>
     <div id="resultPercent">
     	<p>불일치 개수 : <span></span> 개</p>
@@ -387,7 +520,57 @@
     					<span aria-hidden="true">&times;</span>
     				</button>
     			</div>
-    			<div class="modal-body"></div>
+    			<div class="modal-body">
+    				<table id="checkModalTable" class="table table-bordered">
+			        	<thead class="thead-light">
+			        		<tr>
+			        			<th class="center">정의서</th>
+			        			<th class="center">DB</th>
+			        		</tr>
+			        	</thead>
+			        	<tbody>
+			        		<tr>
+			        			<td style="width:50%">
+			        				<table id="docTable" class="table ui celled">
+			                			<thead>
+			                				<tr>
+			                					<th>테이블명</th>
+			                					<th>엔티티명</th>
+			                					<th>물리명</th>
+			                					<th>논리명</th>
+			                					<th>데이터타입</th>
+			                					<th>길이</th>
+			                					<th>자리수</th>
+			                				</tr>
+			                			</thead>
+			                		</table>
+			        			</td>
+			        			<td>
+			        				<table id="tableList" class="table ui celled hidden">
+			        					<thead>
+			        						<tr>
+			        							<th>테이블명</th>
+			        						</tr>
+			        					</thead>
+			        				</table>
+			        				<table id="dbTable" class="table ui celled hidden">
+			        					<thead>
+			        						<tr>
+			        							<th>테이블명</th>
+			                					<th>엔티티명</th>
+			                					<th>물리명</th>
+			                					<th>논리명</th>
+			                					<th>데이터타입</th>
+			                					<th>길이</th>
+			                					<th>자리수</th>
+			        						</tr>
+			        					</thead>
+			        				</table>
+			        			</td>
+			        		</tr>
+			        	</tbody>
+			        </table>
+    			</div>
     		</div>
     	</div>
     </div>

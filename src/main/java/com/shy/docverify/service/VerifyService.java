@@ -20,4 +20,6 @@ public interface VerifyService {
 	public List<TableNameDTO> getTableName(TreeSet<String> asisTableName, UserDTO user);
 	
 	public List<Map<String, Object>> excelVerify(List<ParameterDTO> data, UserDTO user);
+	
+	public List<TableDTO> checkTableList(String schema, UserDTO user);
 }

@@ -224,4 +224,8 @@ public class VerifyServiceImpl implements VerifyService {
 		
 	}
 
+	public List<TableDTO> checkTableList(String schema, UserDTO user) {
+		return dbInfoSql.selectTableWithSchema(schema, user);
+	}
+
 }

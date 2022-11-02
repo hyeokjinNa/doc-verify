@@ -109,10 +109,10 @@ public class DBInfoSql {
 		return list;
 	}
 	
-	public List<String> selectTableWithSchema(String schema, UserDTO user) {
+	public List<TableDTO> selectTableWithSchema(String schema, UserDTO user) {
 		
 		String sql = convert.convertSqlToString("sql/selectTableWithSchema.sql");
-		List<String> list = new ArrayList();
+		List<TableDTO> list = new ArrayList();
 		
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -127,7 +127,10 @@ public class DBInfoSql {
 			result = pre.executeQuery();
 			
 			while(result.next()) {
-				list.add(result.getString(1));
+				TableDTO dto = new TableDTO.TableBuilder()
+						.dbTableName(result.getString(1))
+						.build();
+				list.add(dto);
 			}
 			
 		} catch(Exception e) {
@@ -141,7 +144,6 @@ public class DBInfoSql {
 				System.out.println("close Error");
 			}
 		}
-		
 		return list;
 	}
 	

@@ -44,7 +44,7 @@ table {
 	text-align: center;
 }
 
-#resultTable td, #resultTable th {
+.ui.table>tbody>tr>td, .ui.table>thead>tr>th {
 	text-align: center;
 }
 
@@ -55,10 +55,6 @@ table {
 
 .pointer {
 	cursor : pointer;
-}
-
-#modalTable {
-	text-align: center;
 }
 
 #modalTable th {
@@ -77,10 +73,6 @@ table {
 	font-size: 40px;
 }
 
-#tableSelect {
-	margin-top: 10px;
-}
-
 .footer {
 	text-align: center;
 }
@@ -94,7 +86,22 @@ table {
 }
 
 #resultPercent {
-	margin-left : 100px;
+	margin-left : 150px;
 	margin-bottom: 20px;
 }
+
+#modalTable td {
+	min-width : 150px;
+}
+
+#modalTable td:first-of-type {
+	width : 150px;
+}
+
+#checkModal>.modal-dialog {
+	min-width : 80%;
+}
+
+#docTable > tbody {
+	cursor : pointer;
 }

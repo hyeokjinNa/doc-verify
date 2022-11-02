@@ -106,40 +106,33 @@
         
         const file = this.files[i];
         files.push(file);
-        if (/^application/.test(file.type)&&/.sheet$/.test(file.type)) {
-           //multipart/form-data에 필요함
-           
-           $(".registerBtn label").attr('id','excelFileName').text(file.name);
-           $(".registerBtn input").attr('name','mfiles');
-           $(".registerBtn label").parent().removeClass("registerBtn");
+      //multipart/form-data에 필요함
+        
+        $(".registerBtn label").attr('id','excelFileName').text(file.name);
+        $(".registerBtn input").attr('name','mfiles');
+        $(".registerBtn label").parent().removeClass("registerBtn");
 	       $("<img src='/img/excel.png' />").insertAfter("#excelBoxList input:last");
-           $("<li class='excelBox registerBtn'><input mutiple type='file' id='excelFile' style='display:none;'><label for='excelFile' id='excelUpload'>+</label></li>").insertAfter("#excelBoxList li:last");
+        $("<li class='excelBox registerBtn'><input mutiple type='file' id='excelFile' style='display:none;'><label for='excelFile' id='excelUpload'>+</label></li>").insertAfter("#excelBoxList li:last");
 
-           if($(".excelBox").length==6) {
-               $(".registerBtn").css("display","none");
-           }//if end
+        if($(".excelBox").length==6) {
+            $(".registerBtn").css("display","none");
+        }//if end
 
-           $(".excelBox img").on("click",function (){
+        $(".excelBox img").on("click",function (){
 	           	const fileName = $(this).parent().children('label').text();
 	       		for(let i = 0; i < files.length; i++){
 	       			if(files[i].name == fileName){
 	   	    			files.splice(i,1);
 	       		}
 	       	}
-               
+            
 	           $(this).parent().remove();
 	
 	           if($(".excelBox").length<6) {
 	               $(".registerBtn").css("display","block");
 	           }//if end
-           
-          })//.imgBox click() end
-
-       } else if(/^application/.test(file.type)&&/.ms-excel$/.test(file.type)){
-    	   alert("지원하지 않는 엑셀 버전입니다 ex).xlsx파일로 선택해주세요.");
-       } else {
-           alert("엑셀 선택해주세요.");
-       }
+        
+       })//.imgBox click() end
         
        }//for end
     });//#imgFile change() end
