@@ -47,9 +47,13 @@ public class DBInfoSql {
 		return check;
 	}
 	
-	public List<TableDTO> selectTableInfo(String owner, String table, String column, UserDTO user) {
+	public List<TableDTO> selectTableInfo(TableDTO tableDto, UserDTO user) {
 		
 		String sql = convert.convertSqlToString("sql/selectTableInfo.sql");
+		
+		if(tableDto.getPhysicalName() != null) {
+			sql = sql + " AND COL.COLUMN_NAME = ?";
+		}
 		
 		List<TableDTO> list = new ArrayList<>();
 		
@@ -63,9 +67,12 @@ public class DBInfoSql {
 			
 			conn = DriverManager.getConnection(user.getUrl(), user.getUserName(), user.getPassword());
 			pre = conn.prepareStatement(sql);
-			pre.setString(1, owner);
-			pre.setString(2, table);
-			pre.setString(3, column);
+			pre.setString(1, tableDto.getSchema());
+			pre.setString(2, tableDto.getDbTableName());
+			
+			if(tableDto.getPhysicalName() != null) {
+				pre.setString(3, tableDto.getPhysicalName());
+			}
 			result = pre.executeQuery();
 			
 			while(result.next()) {
@@ -102,9 +109,9 @@ public class DBInfoSql {
 		return list;
 	}
 	
-	public List<String> selectTableList(String schema, UserDTO user) {
+	public List<String> selectTableWithSchema(String schema, UserDTO user) {
 		
-		String sql = convert.convertSqlToString("sql/selectTables.sql");
+		String sql = convert.convertSqlToString("sql/selectTableWithSchema.sql");
 		List<String> list = new ArrayList();
 		
 		Connection conn = null;

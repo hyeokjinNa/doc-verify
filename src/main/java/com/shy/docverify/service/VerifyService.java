@@ -11,11 +11,11 @@ import com.shy.docverify.dto.UserDTO;
 
 public interface VerifyService {
 
-	public List<TableDTO> getDBTable(String schema, String table, String column, UserDTO user); 
+	public List<TableDTO> getDBTable(TableDTO tableDto, UserDTO user); 
 	
 	public Map<String, Object> verifyTables(ParameterDTO firstTable, ParameterDTO secondTable);
 	
-	public Map<String, Object> verifySelectTable (ParameterDTO firstParam, ParameterDTO secondParam);
+//	public Map<String, Object> verifySelectTable (ParameterDTO firstParam, ParameterDTO secondParam);
 	
 	public List<TableNameDTO> getTableName(TreeSet<String> asisTableName, UserDTO user);
 	
