@@ -52,7 +52,7 @@ public class DBInfoSql {
 		String sql = convert.convertSqlToString("sql/selectTableInfo.sql");
 		
 		if(tableDto.getPhysicalName() != null) {
-			sql = sql + " AND COL.COLUMN_NAME = ?";
+			sql = sql + "AND COL.COLUMN_NAME = ?";
 		}
 		
 		List<TableDTO> list = new ArrayList<>();
