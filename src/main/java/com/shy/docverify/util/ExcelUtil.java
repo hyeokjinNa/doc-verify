@@ -107,16 +107,31 @@ public class ExcelUtil {
 									break;
 								case TOBE_DATATYPE:
 									toBeTable.setDataType(value);
+									if(value.equalsIgnoreCase("DATE")||value.equalsIgnoreCase("TIMESTAMP")) {
+										toBeTable.setLength("8");
+									}
 									break;
 								case TOBE_LENGTH:
-									if (value.contains(",")) {
-										delimeter = value.split(",");
-										toBeTable.setPrecision(delimeter[0].trim());
-										toBeTable.setScale(delimeter[1].trim());
-										toBeTable.setLength("22");
-										delimeter = null;
-									} else {
-										toBeTable.setLength(value);
+									if(toBeTable.getLength()==null) {
+										if (value.contains(",")) {
+											delimeter = value.split(",");
+											toBeTable.setPrecision(delimeter[0].trim());
+											toBeTable.setScale(delimeter[1].trim());
+											toBeTable.setLength("22");
+											delimeter = null;
+										} else {
+											if(toBeTable.getDataType().equalsIgnoreCase("NUMBER")) {
+												toBeTable.setLength("22");
+												toBeTable.setPrecision(value);
+												toBeTable.setScale("0");
+											}else {
+												toBeTable.setLength(value);
+												toBeTable.setPrecision("0");
+												toBeTable.setScale("0");
+											}
+											
+										}
+									}else {
 										toBeTable.setPrecision("0");
 										toBeTable.setScale("0");
 									}
@@ -151,16 +166,30 @@ public class ExcelUtil {
 									break;
 								case ASIS_DATATYPE:
 									asIsTable.setDataType(value);
+									if(value.equalsIgnoreCase("DATE")||value.equalsIgnoreCase("TIMESTAMP")) {
+										asIsTable.setLength("8");
+									}
 									break;
 								case ASIS_LENGTH:
-									if (value.contains(",")) {
-										delimeter = value.split(",");
-										asIsTable.setPrecision(delimeter[0].trim());
-										asIsTable.setScale(delimeter[1].trim());
-										asIsTable.setLength("22");
-										delimeter = null;
-									} else {
-										asIsTable.setLength(value);
+									if(asIsTable.getLength()==null) {
+										if (value.contains(",")) {
+											delimeter = value.split(",");
+											asIsTable.setPrecision(delimeter[0].trim());
+											asIsTable.setScale(delimeter[1].trim());
+											asIsTable.setLength("22");
+											delimeter = null;
+										} else {
+											if(asIsTable.getDataType().equalsIgnoreCase("NUMBER")) {
+												asIsTable.setLength("22");
+												asIsTable.setPrecision(value);
+												asIsTable.setScale("0");
+											}else {
+												asIsTable.setLength(value);
+												asIsTable.setPrecision("0");
+												asIsTable.setScale("0");
+											}
+										}
+									}else {
 										asIsTable.setPrecision("0");
 										asIsTable.setScale("0");
 									}
