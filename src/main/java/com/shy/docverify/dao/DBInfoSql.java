@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -112,6 +113,12 @@ public class DBInfoSql {
 	public List<TableDTO> selectTableWithSchema(String schema, UserDTO user) {
 		
 		String sql = convert.convertSqlToString("sql/selectTableWithSchema.sql");
+		
+		if(StringUtils.containsIgnoreCase(schema, "TOBE")) {
+			sql += " AND TABLE_NAME LIKE '%_VA'";
+		}
+		
+		
 		List<TableDTO> list = new ArrayList();
 		
 		Connection conn = null;
