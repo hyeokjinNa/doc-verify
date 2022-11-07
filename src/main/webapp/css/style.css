@@ -101,7 +101,3 @@ table {
 #checkModal>.modal-dialog {
 	min-width : 80%;
 }
-
-#docTable > tbody {
-	cursor : pointer;
-}

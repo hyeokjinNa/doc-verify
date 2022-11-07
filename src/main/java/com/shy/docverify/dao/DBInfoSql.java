@@ -52,7 +52,7 @@ public class DBInfoSql {
 		
 		String sql = convert.convertSqlToString("sql/selectTableInfo.sql");
 		
-		if(tableDto.getPhysicalName() != null) {
+		if(StringUtils.isNotEmpty(tableDto.getPhysicalName())) {
 			sql = sql + "AND COL.COLUMN_NAME = ?";
 		}
 		
@@ -71,7 +71,7 @@ public class DBInfoSql {
 			pre.setString(1, tableDto.getSchema());
 			pre.setString(2, tableDto.getDbTableName());
 			
-			if(tableDto.getPhysicalName() != null) {
+			if(StringUtils.isNotEmpty(tableDto.getPhysicalName())) {
 				pre.setString(3, tableDto.getPhysicalName());
 			}
 			result = pre.executeQuery();
@@ -106,7 +106,7 @@ public class DBInfoSql {
 				System.out.println("close Error");
 			}
 		}
-
+		
 		return list;
 	}
 	
@@ -135,7 +135,8 @@ public class DBInfoSql {
 			
 			while(result.next()) {
 				TableDTO dto = new TableDTO.TableBuilder()
-						.dbTableName(result.getString(1))
+						.schema(result.getString(1))
+						.dbTableName(result.getString(2))
 						.build();
 				list.add(dto);
 			}

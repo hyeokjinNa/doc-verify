@@ -58,7 +58,7 @@
 	                info : true, // 정보 표시 - 몇 건 있는지
 	                autoWidth : false,
 	                paging : true,
-	                pagingType : "simple_numbers_no_ellipses",
+	                pagingType : "full_numbers_no_ellipses",
 	                pageLength : 20, // displayLength
 	                lengthMenu: [[10, 20, 30, -1], [10, 20, 30, "ALL"]],
 	                //order : [[0, "asc"], [7, "desc"], [2, "asc"]], // 초기 정렬 [[열 번호, 정렬 순서]]
@@ -129,8 +129,10 @@
 				    {
 				        paginate:
 				        {
-				            previous: "<",
-				            next: ">"
+				            previous : "<",
+				            next : ">",
+				            first : "<<",
+				            last : ">>"
 				        },
 	                    lengthMenu : "_MENU_ 개씩 보기",
 	                    info : "_START_ - _END_ \/ _TOTAL_ ",
@@ -169,9 +171,11 @@
 			                	});
 			                	
 			                	$("#docTable").DataTable().destroy();
+			                	$("#tableList").hide();
+			                	$("#dbTable").hide();
+			                	
 	                			makeDocDataTable(array);
 	                			$("#checkModal").modal('show');
-	                			// 반은 정의서에 없고 디비에만 있는 애들 (테이블 선택해서)
 	                		}
 	                	}
 	                ]
@@ -243,8 +247,31 @@
             		type : "post",
             		data : {schema : data.schema},
             		success : function(data) {
+            			$("#dbTable").DataTable().destroy();
+            			$("#dbTable").hide();
+            			
             			makeTableListDataTable(data);
-            			$("#tableList").removeClass('hidden');
+            			$("#tableList").show();
+            			$("#tableList tr").addClass("pointer");
+            			$("#tableList").DataTable().columns.adjust().draw();
+            		}
+            	});
+            });
+            
+            $("#tableList").on('click', 'tr', function() {
+            	var data = $("#tableList").DataTable().row(this).data();
+            	
+            	$.ajax({
+            		url : "/checkDbTable",
+            		type : "post",
+            		data : data,
+            		success : function(data) {
+            			$("#tableList").DataTable().destroy();
+            			$("#tableList").hide();
+            			
+            			makeDbDataTable(data);
+            			$("#dbTable").show();
+            			$("#dbTable").DataTable().columns.adjust().draw();
             		}
             	});
             });
@@ -311,19 +338,25 @@
 			    },
 			    responsive : true,
 			    initComplete : function (settings, json) {  
-			        $("#docTable").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+			        $("#docTable").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");  
 			    }
         	});
         	
-        	docTable.columns.adjust();
+        	$("#docTable tr").addClass("pointer");
         }
         
 		function makeTableListDataTable(array) {
+			$("#tableList").DataTable().destroy();
         	
         	var tableList = $("#tableList").DataTable({
                 data : array,
                 columns : [
-                    {data : "dbTableName"}
+                    {
+                    	data : "dbTableName",
+                    	render : function(data, type, row) {
+                        	return row.schema + "." + data;
+                        }
+                    }
                 ],
                 lengthChange : false,
                 searching : true,
@@ -331,7 +364,7 @@
                 info : false,
                 autoWidth : false,
                 paging : false,
-                scrollY: "70vh",
+                scrollY: "60vh",
                 scrollCollapse: true,
                 processing : true,
                 columnDefs : [ // 각 컬럼들에 대한 커스터마이징
@@ -345,11 +378,8 @@
                     search : "검색 : ",
                     zeroRecords : "검색 결과가 없습니다",
                     loadingRecords : "로딩중..."
-			    },
-			    responsive : true
+			    }
         	});
-        	
-        	tableList.columns.adjust();
         }
         
 		function makeDbDataTable(array) {
@@ -357,7 +387,7 @@
         	var dbTable = $("#dbTable").DataTable({
                 data : array,
                 columns : [
-                    {data : "tableName"},
+                    {data : "dbTableName"},
                     {data : "entityName"},
                     {data : "physicalName"},
                     {data : "logicalName"},
@@ -371,7 +401,7 @@
                 info : false,
                 autoWidth : false,
                 paging : false,
-                scrollY: "70vh",
+                scrollY: "60vh",
                 scrollCollapse: true,
                 processing : true,
                 columnDefs : [ // 각 컬럼들에 대한 커스터마이징
@@ -391,55 +421,52 @@
                     search : "검색 : ",
                     zeroRecords : "검색 결과가 없습니다",
                     loadingRecords : "로딩중..."
-			    },
-			    responsive : true
+			    }
         	});
-        	
-        	dbTable.columns.adjust();
         }
         
         
-        $.fn.DataTable.ext.pager.simple_numbers_no_ellipses = function(page, pages) {
-		   var numbers = [];
-		   var buttons = $.fn.DataTable.ext.pager.numbers_length;
-		   var half = Math.floor( buttons / 2 );
-		
-		   var _range = function ( len, start ){
-		      var end;
-		   
-		      if ( typeof start === "undefined" ){ 
-		         start = 0;
-		         end = len;
-		
-		      } else {
-		         end = start;
-		         start = len;
-		      }
-		
-		      var out = []; 
-		      for ( var i = start ; i < end; i++ ){ out.push(i); }
-		   
-		      return out;
-		   };
-		    
-		
-		   if ( pages <= buttons ) {
-		      numbers = _range( 0, pages );
-		
-		   } else if ( page <= half ) {
-		      numbers = _range( 0, buttons);
-		
-		   } else if ( page >= pages - 1 - half ) {
-		      numbers = _range( pages - buttons, pages );
-		
-		   } else {
-		      numbers = _range( page - half, page + half + 1);
-		   }
-		
-		   numbers.DT_el = 'span';
-		
-		   return [ 'previous', numbers, 'next' ];
-		};
+		$.fn.DataTable.ext.pager.full_numbers_no_ellipses = function(page, pages){
+			   var numbers = [];
+			   var buttons = $.fn.DataTable.ext.pager.numbers_length;
+			   var half = Math.floor( buttons / 2 );
+
+			   var _range = function ( len, start ){
+			      var end;
+			   
+			      if ( typeof start === "undefined" ){ 
+			         start = 0;
+			         end = len;
+
+			      } else {
+			         end = start;
+			         start = len;
+			      }
+
+			      var out = []; 
+			      for ( var i = start ; i < end; i++ ){ out.push(i); }
+			   
+			      return out;
+			   };
+			    
+
+			   if ( pages <= buttons ) {
+			      numbers = _range( 0, pages );
+
+			   } else if ( page <= half ) {
+			      numbers = _range( 0, buttons);
+
+			   } else if ( page >= pages - 1 - half ) {
+			      numbers = _range( pages - buttons, pages );
+
+			   } else {
+			      numbers = _range( page - half, page + half + 1);
+			   }
+
+			   numbers.DT_el = 'span';
+
+			   return [ 'first', 'previous', numbers, 'next', 'last' ];
+			};
 		
     </script>
 </head>
@@ -546,14 +573,14 @@
 			                		</table>
 			        			</td>
 			        			<td>
-			        				<table id="tableList" class="table ui celled hidden">
+			        				<table id="tableList" class="table ui celled">
 			        					<thead>
 			        						<tr>
 			        							<th>테이블명</th>
 			        						</tr>
 			        					</thead>
 			        				</table>
-			        				<table id="dbTable" class="table ui celled hidden">
+			        				<table id="dbTable" class="table ui celled">
 			        					<thead>
 			        						<tr>
 			        							<th>테이블명</th>
