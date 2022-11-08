@@ -54,7 +54,7 @@
 	        <div class="dbSettingContent">
 	                <div class="inputWrap">
 	                    <h2>url</h2>
-	                    <input name="url" class="input-group" value="jdbc:tibero:thin:@(DESCRIPTION=(failover=on)(load_balance=on)(address_list=(address=(host=10.175.152.219)(port=28629))(address=(host=10.175.152.220)(port=28629)))(database_name=db_p_gmd))"/>
+	                    <input name="url" class="input-group"/>
 	                </div>
 	                <div class="inputWrap">
 	                    <h2>driver</h2>
