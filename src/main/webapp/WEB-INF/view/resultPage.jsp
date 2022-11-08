@@ -31,6 +31,8 @@
         $.fn.DataTable.ext.pager.numbers_length = 5;
 
         $(function(){
+        	const columnNames = {"tableName":"테이블명", "entityName":"엔티티명", "physicalName":"물리명", "logicalName":"논리명",
+        			"dataType":"데이터타입", "length":"길이", "precision":"자리수", "pk":"PK", "notNull":"Not Null", "match":"일치"};
             let checked;
             let datas = eval('${dataJson}');
             
@@ -206,7 +208,7 @@
                 		'<thead class="thead-light"><tr><th>불일치 컬럼</th><th>DB</th><th>정의서</th></tr></thead>' +
                 		'<tbody>';
                 	
-                	for(var i=0; i<dbData.length; i++) { // wrongCols 테이블명처럼 나오게 바꾸기
+                	for(var i=0; i<dbData.length; i++) {
                 		if(dbData[i].tableName == data.tableName && dbData[i].physicalName == data.physicalName) {
                 			for(var j=0; j<wrongCols.length; j++) {
                 				var key = wrongCols[j];
@@ -222,7 +224,7 @@
                 				}
                 				
                 				html += '<tr>';
-                				html += '<td class="table-active">' + key + '</td>';
+                				html += '<td class="table-active">' + columnNames[key] + '</td>';
                 				html += '<td>' + dbWrong + '</td>';
                 				html += '<td>' + docWrong + '</td>';
                 				html += '</tr>';
