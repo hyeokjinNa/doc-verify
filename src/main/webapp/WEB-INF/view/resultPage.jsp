@@ -147,7 +147,7 @@
 	                    infoThousands : ","
 				    },
 	                stateSave : true, // 현재 상태를 보존
-	                dom : 'Bfrtip',
+	                dom : '<"top"lf>rt<"bottom"Bpi><"clear">',
 	                buttons : [
 	                	{
 	                		text : '다운로드',
@@ -478,12 +478,14 @@
         <h2 id="title" class="center">정의서 DB 일치 결과</h2>
     </div>
     <div class="center">
-        <input type="radio" id="all" name="matchRadio" value="all" checked>
-        <label for="all">전체</label>
-        <input type="radio" id="match" name="matchRadio" value="match">
-        <label for="match">일치</label>
-        <input type="radio" id="notMatch" name="matchRadio" value="notMatch">
-        <label for="notMatch">불일치</label>
+    	<div class="form-check-inline">
+	        <input type="radio" id="all" class="form-check-input" name="matchRadio" value="all" checked>
+	        <label for="all" class="form-check-label">전체</label>
+	        <input type="radio" id="match" class="form-check-input" name="matchRadio" value="match">
+	        <label for="match" class="form-check-label">일치</label>
+	        <input type="radio" id="notMatch" class="form-check-input" name="matchRadio" value="notMatch">
+	        <label for="notMatch" class="form-check-label">불일치</label>
+	    </div>
     </div>
     <div id="resultPercent">
     	<p>불일치 개수 : <span></span> 개</p>
