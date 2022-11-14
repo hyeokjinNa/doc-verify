@@ -157,13 +157,6 @@ public class DBInfoSql {
 	
 	public List<TableNameDTO> selectTableNameList(TreeSet<String> asisTableName, UserDTO user){
 		
-		user = new UserDTO.UserBuilder()
-				.url("jdbc:tibero:thin:@10.47.39.125:8629:DB_D_GMD")
-				.driver("com.tmax.tibero.jdbc.TbDriver")
-				.userName("GMDMF")
-				.password("gmdmf")
-				.build();
-		
 		String sql = convert.convertSqlToString("sql/selectTableNames.sql");
 		List<String> setToList = new ArrayList<String>();
 		setToList.addAll(asisTableName);
